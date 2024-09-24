@@ -10,7 +10,6 @@ library(pheatmap)
 library(annotables)
 library(clusterProfiler)
 library(enrichplot)
-library(organism, character.only = TRUE)
 library(DOSE)
 library(tidyverse)
 grcm38 # mouse genes
@@ -22,6 +21,7 @@ source("functions/gettop10GO.R")
 my_logFC_threshold = 0.2
 
 y1a <- readRDS("results/LH_limma_results.RDS")
+
 
 gettop10GO(y1a, my_showCategory) %>% 
   mutate(comparison = "Control - Stress") -> top10_GOterms_LH

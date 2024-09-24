@@ -326,25 +326,82 @@ gene.signf.corr.pvals %>%
 
 #### FOLLOWUP ANALYSIS OF VARIOUS THINGS FOUND ABOVE 
 
-library(AnnotationDbi)
+
 library(clusterProfiler)
 library(enrichplot)
+library(biomaRt)
+library(AnnotationDbi)
+library(annotables)
+grcm38 <- grcm38
 source("functions/gettop10GO.R")
 
+#1st - pull LH_limma_results1 <- readRDS("results/LH_limma_results.RDS")
+#2nd - filter genes that are only in modules of interest - call them MEcolor
+#3rd - attach LH_limma_results1 to filteres MEcolor datasets
+#4th - do GO analysis of merged MEcolor-limma datasets 
+#5th - and highest MM ranking of MEcolor datasets
+
+
+## steps 1-3
+LH_limma_results1 <- readRDS("results/LH_limma_results.RDS")
+MEallcolors <- tibble::rownames_to_column(module.gene.mapping, "symbol")
+colnames(MEallcolors)[2] <- "MEcolor"
+
+gene.signf.corr2 <- as.data.frame(gene.signf.corr)
+gene.signf.corr2 <- tibble::rownames_to_column(gene.signf.corr2, "symbol")
+colnames(gene.signf.corr2)[2] <- "gene.signif.corr"
+
+gene.signf.corr.pvals2 <- as.data.frame(gene.signf.corr.pvals)
+gene.signf.corr.pvals2 <- tibble::rownames_to_column(gene.signf.corr.pvals2, "symbol")
+colnames(gene.signf.corr.pvals2)[2] <- "gene.signif.corr.pval"
+
+MEallcolors2 <- left_join(MEallcolors, gene.signf.corr2, by = "symbol") %>% 
+  left_join(., gene.signf.corr.pvals2, by = "symbol")
+
+write.csv(MEallcolors2, "results/MEallcolors_LH.csv")
+
+
+MEyellow <- MEallcolors2 %>% 
+  filter(MEcolor == "yellow")
+
+MEyellow.limma <- LH_limma_results1 %>% 
+  left_join(MEyellow, by = "symbol") %>%
+  filter(!is.na(MEcolor)) %>% 
+  select(1,2,3,4,10,11,12,13)
+
+
+MEmagenta <- MEallcolors2 %>% 
+  filter(MEcolor == "magenta")
+
+MEmagenta.limma <- LH_limma_results1 %>% 
+  left_join(MEmagenta, by = "symbol") %>%
+  filter(!is.na(MEcolor)) %>% 
+  select(1,2,3,4,10,11,12,13)
+
 ## GO ANALYSIS OF YELLOW MODULE
+gettop10GO(MEyellow.limma, my_showCategory) %>% 
+  mutate(comparison = "Control - Stress") -> GOterms_LH_yellow
 
-
+write.csv(GOterms_LH_yellow, "results/GOterms_LH_yellow.csv")
 
 ## HIGHEST MM OF YELLOW MODULE
+MEyellow.limma %>% 
+  arrange(gene.signif.corr.pval) %>% 
+  head(5)
+
 
 
 
 ## GO ANALYSIS OF MAGENTA MODULE
+gettop10GO(MEmagenta.limma, my_showCategory) %>% 
+  mutate(comparison = "Control - Stress") -> GOterms_LH_magenta
 
-
+write.csv(GOterms_LH_magenta, "results/GOterms_LH_magenta.csv")
 
 ## HIGHEST MM OF MAGENTA MODULE
-
+MEmagenta.limma %>% 
+  arrange(gene.signif.corr.pval) %>% 
+  head(5)
 
 
 
@@ -352,12 +409,10 @@ source("functions/gettop10GO.R")
 
 
 ### SHOULD PROBABLY DO THIS FOLLOW UP WITH THE DEG GO-ANALYSIS 
-norm.counts2 <- norm.counts
-norm.counts2 <- as.data.frame(norm.counts2)
-norm.counts3 <- tibble::rownames_to_column(norm.counts2, "subject")
-normcounts.coldata <- cbind(colData, norm.counts3)
-
-
+# norm.counts2 <- norm.counts
+# norm.counts2 <- as.data.frame(norm.counts2)
+# norm.counts3 <- tibble::rownames_to_column(norm.counts2, "subject")
+# normcounts.coldata <- cbind(colData, norm.counts3)
 
 
 
