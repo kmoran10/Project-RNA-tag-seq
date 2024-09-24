@@ -1,9 +1,9 @@
 {
     "id": "EF8004C5",
-    "path": "Z:/DelvilleLab/Kevin Lab/Project RNA tag seq/analysis/WGCNA_LH.R",
+    "path": "C:/R_Projects/Project-RNA-tag-seq/Project RNA tag seq/analysis/WGCNA_LH.R",
     "project_path": "analysis/WGCNA_LH.R",
     "type": "r_source",
-    "hash": "298309014",
+    "hash": "0",
     "contents": "",
     "dirty": false,
     "created": 1725890673317.0,
@@ -17,11 +17,11 @@
         "scrollLine": "294"
     },
     "folds": "",
-    "lastKnownWriteTime": 1727111688,
+    "lastKnownWriteTime": 1727186399,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1727111695861,
+    "last_content_update": 1727186399,
     "read_only": false,
     "read_only_alternatives": []
 }
