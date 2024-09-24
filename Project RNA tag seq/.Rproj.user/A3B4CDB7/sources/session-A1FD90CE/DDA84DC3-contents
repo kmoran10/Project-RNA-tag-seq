@@ -1,0 +1,27 @@
+
+library(tidyverse)
+
+
+rawcounts <- read.delim("raw_data/combined_using_mouse_reference.gff.txt",header=F)
+
+colnames(rawcounts) <- c("gene","counts", "id")
+
+
+bcx <- rawcounts %>%  pivot_wider(names_from = id, values_from = counts)
+
+
+write.csv(bcx, "raw_data/rnaseq_counts_ms.csv", row.names = F)
+
+
+#######
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,27 @@
+{
+    "id": "A938BB7B",
+    "path": "Z:/DelvilleLab/Kevin Lab/Project RNA tag seq/analysis/03_VolcanoPlots_DMH.R",
+    "project_path": "analysis/03_VolcanoPlots_DMH.R",
+    "type": "r_source",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1713466315100.0,
+    "source_on_save": false,
+    "relative_order": 4,
+    "properties": {
+        "tempName": "Untitled1",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "104,33",
+        "scrollLine": "83"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1716597071,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1716597071128,
+    "read_only": false,
+    "read_only_alternatives": []
+}

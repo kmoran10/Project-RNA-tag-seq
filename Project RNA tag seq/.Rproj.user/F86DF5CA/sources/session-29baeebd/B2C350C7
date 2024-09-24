@@ -1,0 +1,26 @@
+{
+    "id": "B2C350C7",
+    "path": "Z:/DelvilleLab/Kevin Lab/Project RNA tag seq/analysis/02_DEGs_GoAnalysis.R",
+    "project_path": "analysis/02_DEGs_GoAnalysis.R",
+    "type": "r_source",
+    "hash": "658437993",
+    "contents": "",
+    "dirty": true,
+    "created": 1727110166349.0,
+    "source_on_save": false,
+    "relative_order": 2,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "17,0",
+        "scrollLine": "8"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1717655953,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1727110512794,
+    "read_only": false,
+    "read_only_alternatives": []
+}

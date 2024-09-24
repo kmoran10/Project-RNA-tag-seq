@@ -1,0 +1,371 @@
+
+# WGCNA for LH
+
+library(WGCNA)
+library(DESeq2)
+library(GEOquery)
+library(tidyverse)
+library(CorLevelPlot)
+library(gridExtra)
+
+allowWGCNAThreads()          # allow multi-threading (optional)
+
+data <- read.csv("ham_brain_data/LH_counts.csv")
+
+phenoData <- read.csv("ham_brain_data/LH_id.csv")
+
+data[1:10, 1:10]
+head(phenoData)
+
+# prepare data
+
+data <- data %>% 
+  gather(key = "samples", value = "counts", -X) %>% 
+  rename(gene = X) %>% 
+  inner_join(., phenoData, by = c("samples" = "X")) %>% 
+  select(1, 3, 4) %>% 
+  spread(key = "subject", value = "counts") %>% 
+  column_to_rownames(var = "gene") %>%
+  slice(-1:-5)
+
+
+# 2. QC - outlier detection ------------------------------------------------
+# detect outlier genes
+
+gsg <- goodSamplesGenes(t(data))
+summary(gsg)
+gsg$allOK
+
+
+table(gsg$goodGenes)
+table(gsg$goodSamples)
+
+# remove genes that are detected as outliers
+data <- data[gsg$goodGenes == TRUE,]
+
+
+# detect outlier samples - hierarchical clustering - method 1
+htree <- hclust(dist(t(data)), method = "average")
+plot(htree)
+# KM193 potentially seems like an outlier sample
+
+
+# pca - method 2 for finding outliers 
+
+pca <- prcomp(t(data))
+pca.dat <- pca$x
+
+pca.var <- pca$sdev^2
+pca.var.percent <- round(pca.var/sum(pca.var)*100, digits = 2)
+
+pca.dat <- as.data.frame(pca.dat)
+
+ggplot(pca.dat, aes(PC1, PC2)) +
+  geom_point() +
+  geom_text(label = rownames(pca.dat)) +
+  labs(x = paste0('PC1: ', pca.var.percent[1], ' %'),
+       y = paste0('PC2: ', pca.var.percent[2], ' %'))
+#KM193 again seems like a potential outlier 
+
+
+# exclude outlier samples
+samples.to.be.excluded <- c('KM193')
+data.subset <- data[,!(colnames(data) %in% samples.to.be.excluded)]
+### ***  note in results that we exclude KM193 because of higher variance compared to all other samples 
+
+
+
+# 3. Normalization ----------------------------------------------------------------------
+# create a deseq2 dataset
+
+phenoData <- phenoData %>% 
+  column_to_rownames(var = "subject")
+
+# exclude outlier samples
+colData <- phenoData %>% 
+  filter(!row.names(.) %in% samples.to.be.excluded)
+
+
+# fixing column names in colData
+names(colData)
+
+# selecting relevant info
+colData <- colData %>% 
+  select(3, 10, 11, 13, 14, 15, 20, 22)
+
+# making the rownames and column names identical
+all(rownames(colData) %in% colnames(data.subset))
+all(rownames(colData) == colnames(data.subset))
+
+
+
+# create dds
+dds <- DESeqDataSetFromMatrix(countData = data.subset,
+                              colData = colData,
+                              design = ~ 1) # not specifying model "because we need this DSeq data set to perform variance stabilizing transformation"
+
+
+## remove all genes with counts < 15 in more than 75% of samples (19*0.75=14.25)
+## suggested by WGCNA on RNAseq FAQ
+
+dds75 <- dds[rowSums(counts(dds) >= 15) >= 15,]
+nrow(dds75) # 8409 genes
+
+
+# perform variance stabilization
+dds_norm <- vst(dds75)
+
+
+# get normalized counts
+norm.counts <- assay(dds_norm) %>% 
+  t()
+
+
+
+
+# 4. Network Construction  ---------------------------------------------------
+# Choose a set of soft-thresholding powers
+power <- c(c(1:10), seq(from = 12, to = 50, by = 2))
+power
+
+# Call the network topology analysis function
+sft <- pickSoftThreshold(norm.counts,
+                         powerVector = power,
+                         networkType = "signed",
+                         verbose = 5)
+
+
+sft.data <- sft$fitIndices
+
+# visualization to pick power
+
+a1 <- ggplot(sft.data, aes(Power, SFT.R.sq, label = Power)) +
+  geom_point() +
+  geom_text(nudge_y = 0.1) +
+  geom_hline(yintercept = 0.8, color = 'red') +
+  labs(x = 'Power', y = 'Scale free topology model fit, signed R^2') +
+  theme_classic()
+
+
+a2 <- ggplot(sft.data, aes(Power, mean.k., label = Power)) +
+  geom_point() +
+  geom_text(nudge_y = 0.1) +
+  labs(x = 'Power', y = 'Mean Connectivity') +
+  theme_classic()
+
+
+grid.arrange(a1, a2, nrow = 2)
+# selecting a power of 12 since it seems to maximize around here and has minimal mean connectivity
+# 4 or 5 is where it crossed over R^2 of .8, but mean connectivity was still relatively high.
+# 10 could potentially work if this R^2 is "excessively high" for some reason. 
+
+
+
+# convert matrix to numeric
+norm.counts[] <- sapply(norm.counts, as.numeric)
+
+soft_power <- 12 
+temp_cor <- cor
+cor <- WGCNA::cor
+
+
+# memory estimate w.r.t blocksize
+bwnet <- blockwiseModules(norm.counts,
+                          maxBlockSize = 14000, #suitable for 16gigs of RAM in PC
+                          TOMType = "signed",
+                          power = soft_power,
+                          mergeCutHeight = 0.25, #threshold of merging simmilar modules 
+                          numericLabels = FALSE, #to set model eigengene labels as colors 
+                          randomSeed = 1234,
+                          verbose = 3)
+
+
+cor <- temp_cor
+
+
+
+
+# 5. Module Eigengenes ---------------------------------------------------------
+module_eigengenes <- bwnet$MEs
+
+
+# Print out a preview
+head(module_eigengenes)
+
+
+# get number of genes for each module
+table(bwnet$colors)
+
+# Plot the dendrogram and the module colors before and after merging underneath
+plotDendroAndColors(bwnet$dendrograms[[1]], cbind(bwnet$unmergedColors, bwnet$colors),
+                    c("unmerged", "merged"),
+                    dendroLabels = FALSE,
+                    addGuide = TRUE,
+                    hang= 0.03,
+                    guideHang = 0.05)
+
+
+
+
+# grey module = all genes that doesn't fall into other modules were assigned to the grey module
+
+
+
+
+
+# 6A. Relate modules to traits --------------------------------------------------
+# module trait associations
+
+
+
+# create traits file - binarize categorical variables
+traits <- colData %>% 
+  mutate(stress_bin = ifelse(grepl('Stress', group), 1, 0)) %>% 
+  select(9)
+
+
+# binarize categorical variables 
+
+# colData$severity <- factor(colData$severity, levels = c("Healthy", "Convalescent", "ICU", "Moderate", "Severe"))
+# 
+# severity.out <- binarizeCategoricalColumns(colData$severity,
+#                                            includePairwise = FALSE,
+#                                            includeLevelVsAll = TRUE,
+#                                            minCount = 1)
+# 
+# 
+# traits <- cbind(traits, severity.out)
+### NOT DOING ABOVE, NOT RELEVANT
+
+# Define numbers of genes and samples
+nSamples <- nrow(norm.counts)
+nGenes <- ncol(norm.counts)
+
+
+module.trait.corr <- cor(module_eigengenes, traits, use = 'p')
+module.trait.corr.pvals <- corPvalueStudent(module.trait.corr, nSamples)
+
+View(module.trait.corr.pvals)
+
+
+# visualize module-trait association as a heatmap
+
+heatmap.data <- merge(module_eigengenes, traits, by = 'row.names')
+
+head(heatmap.data)
+
+heatmap.data <- heatmap.data %>% 
+  column_to_rownames(var = 'Row.names')
+
+
+
+### NEED TO adjust this step depending on dimensions of heatmap.data
+names(heatmap.data)
+
+## IN THE FOLLOWING: POSITIVE VALUES MEAN ME EXPRESSION IN HIGHER IN TRAIT CODED WITH 1 COMPARED TO TRAIT CODED WITH 0 
+CorLevelPlot(heatmap.data,
+             x = names(heatmap.data)[15:15], #trait data
+             y = names(heatmap.data)[1:14], #ME data
+             col = c("blue1", "skyblue", "white", "pink", "red"))
+
+## so for LH, modules magenta and yellow are significantly altered by stress
+
+module.gene.mapping <- as.data.frame(bwnet$colors)
+
+## FROM HERE, CAN PERFORM FURTHER ANALYSIS ON GENES IN IMPORTANT MODULES - the following lists the genes in relevant modules that are selected from above analysis to be modules that are differentially expressed between groups
+
+
+## THIS ME has LOWER expression in Stress
+module.gene.mapping %>% 
+  filter(`bwnet$colors` == 'yellow') %>% 
+  rownames()
+
+## THIS ME has HIGHER expression in Stress
+module.gene.mapping %>% 
+  filter(`bwnet$colors` == 'magenta') %>% 
+  rownames()
+
+
+# 6B. Intramodular analysis: Identifying driver genes ---------------
+#"highly connected intramodular hub genes"
+
+
+# Calculate the module membership and the associated p-values
+
+# The module membership/intramodular connectivity is calculated as the correlation of the eigengene and the gene expression profile. 
+# This quantifies the similarity of all genes on the array to every module.
+
+module.membership.measure <- cor(module_eigengenes, norm.counts, use = 'p')
+module.membership.measure.pvals <- corPvalueStudent(module.membership.measure, nSamples)
+
+module.membership.measure[1:10,1:10]
+module.membership.measure.pvals[1:10,1:10] # just a check that this ran right
+
+
+# Calculate the gene significance and associated p-values
+#correlate expression data with trait of interest - FOR ME, JUST stress_bin
+
+gene.signf.corr <- cor(norm.counts, traits$stress_bin, use = 'p')
+gene.signf.corr.pvals <- corPvalueStudent(gene.signf.corr, nSamples)
+
+
+gene.signf.corr.pvals %>% 
+  as.data.frame() %>% 
+  arrange(V1) %>% 
+  head(25)
+#top 25 genes in the LH sig associated with stress experience 
+### NEED TO DO SOMETHING SIMILAR TO THIS *JUST* WITHIN SIG MODULES - GET "HIGHEST MM GENES"   ### basically take module.membership.measure.pvals, flip orientation, filter only relevant module, then arrange(V1) 
+
+
+
+# Using the gene significance you can identify genes that have a high significance for trait of interest 
+# Using the module membership measures you can identify genes with high module membership in interesting modules.
+
+
+
+
+#### FOLLOWUP ANALYSIS OF VARIOUS THINGS FOUND ABOVE 
+
+library(AnnotationDbi)
+library(clusterProfiler)
+library(enrichplot)
+source("functions/gettop10GO.R")
+
+## GO ANALYSIS OF YELLOW MODULE
+
+
+
+## HIGHEST MM OF YELLOW MODULE
+
+
+
+## GO ANALYSIS OF MAGENTA MODULE
+
+
+
+## HIGHEST MM OF MAGENTA MODULE
+
+
+
+
+
+
+
+### SHOULD PROBABLY DO THIS FOLLOW UP WITH THE DEG GO-ANALYSIS 
+norm.counts2 <- norm.counts
+norm.counts2 <- as.data.frame(norm.counts2)
+norm.counts3 <- tibble::rownames_to_column(norm.counts2, "subject")
+normcounts.coldata <- cbind(colData, norm.counts3)
+
+
+
+
+
+
+
+
+
+
+
+
+

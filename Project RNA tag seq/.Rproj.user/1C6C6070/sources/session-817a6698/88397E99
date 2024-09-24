@@ -1,0 +1,28 @@
+{
+    "id": "88397E99",
+    "path": "Z:/DelvilleLab/Kevin Lab/Project RNA tag seq/analysis/03_VolcanoPlots_LH.R",
+    "project_path": "analysis/03_VolcanoPlots_LH.R",
+    "type": "r_source",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1713303030764.0,
+    "source_on_save": false,
+    "relative_order": 3,
+    "properties": {
+        "tempName": "Untitled1",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "101,0",
+        "scrollLine": "0",
+        "ignored_words": "entrez\n"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1716596278,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1716596278075,
+    "read_only": false,
+    "read_only_alternatives": []
+}
