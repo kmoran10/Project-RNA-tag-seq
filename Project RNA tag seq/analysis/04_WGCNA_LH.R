@@ -378,6 +378,8 @@ MEyellow.limma <- LH_limma_results1 %>%
   filter(!is.na(MEcolor)) %>% 
   select(1,2,3,4,10,11,12,13)
 
+write.csv(MEyellow.limma, "results/LH_MEyellow_limma.csv")
+
 
 MEmagenta <- MEallcolors2 %>% 
   filter(MEcolor == "magenta")
@@ -386,6 +388,8 @@ MEmagenta.limma <- LH_limma_results1 %>%
   left_join(MEmagenta, by = "symbol") %>%
   filter(!is.na(MEcolor)) %>% 
   select(1,2,3,4,10,11,12,13)
+
+write.csv(MEmagenta.limma, "results/LH_MEmagenta_limma.csv")
 
 ## GO ANALYSIS OF YELLOW MODULE
 gettop10GO(MEyellow.limma, my_showCategory) %>% 
@@ -411,18 +415,6 @@ write.csv(GOterms_LH_magenta, "results/GOterms_LH_magenta.csv")
 MEmagenta.limma %>% 
   arrange(gene.signif.corr.pval) %>% 
   head(5)
-
-
-
-
-
-
-### SHOULD PROBABLY DO THIS FOLLOW UP WITH THE DEG GO-ANALYSIS 
-# norm.counts2 <- norm.counts
-# norm.counts2 <- as.data.frame(norm.counts2)
-# norm.counts3 <- tibble::rownames_to_column(norm.counts2, "subject")
-# normcounts.coldata <- cbind(colData, norm.counts3)
-
 
 
 
