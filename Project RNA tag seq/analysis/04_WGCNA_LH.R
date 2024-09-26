@@ -271,11 +271,13 @@ heatmap.data <- heatmap.data %>%
 ### NEED TO adjust this step depending on dimensions of heatmap.data
 names(heatmap.data)
 
-## IN THE FOLLOWING: POSITIVE VALUES MEAN ME EXPRESSION IN HIGHER IN TRAIT CODED WITH 1 COMPARED TO TRAIT CODED WITH 0 
+## IN THE FOLLOWING: POSITIVE VALUES MEAN ME EXPRESSION IN HIGHER IN TRAIT CODED WITH 1 COMPARED TO TRAIT CODED WITH 0 - specifically positive = higher in stressed
+### SAVE 550x800
 CorLevelPlot(heatmap.data,
              x = names(heatmap.data)[15:15], #trait data
              y = names(heatmap.data)[1:14], #ME data
-             col = c("blue1", "skyblue", "white", "pink", "red"))
+             col = c("blue3", "skyblue", "white", "#f7ab5e", "orange2"),
+             main = "WGCNA Module Eigengenes - LH") 
 
 ## so for LH, modules magenta and yellow are significantly altered by stress
 
