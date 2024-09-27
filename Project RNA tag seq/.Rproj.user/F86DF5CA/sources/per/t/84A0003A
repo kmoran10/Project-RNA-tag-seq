@@ -12,13 +12,13 @@
     "properties": {
         "expression": "module.trait.corr.pvals",
         "caption": "module.trait.corr.pvals",
-        "totalObservations": "17",
-        "displayedObservations": "17",
+        "totalObservations": "31",
+        "displayedObservations": "31",
         "variables": "1",
-        "cacheKey": "109F5841",
+        "cacheKey": "C91476D1",
         "object": "module.trait.corr.pvals",
         "environment": "",
-        "contentUrl": "grid_resource/gridviewer.html?env=&obj=module.trait.corr.pvals&cache_key=109F5841&max_display_columns=50",
+        "contentUrl": "grid_resource/gridviewer.html?env=&obj=module.trait.corr.pvals&cache_key=C91476D1&max_display_columns=50",
         "preview": "0",
         "source_window_id": "",
         "Source": "Source"

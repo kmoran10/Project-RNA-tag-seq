@@ -3,7 +3,7 @@
     "path": "C:/R_Projects/Project-RNA-tag-seq/Project RNA tag seq/analysis/04_WGCNA_DMH_outliers_out.R",
     "project_path": "analysis/04_WGCNA_DMH_outliers_out.R",
     "type": "r_source",
-    "hash": "2405650904",
+    "hash": "2285776411",
     "contents": "",
     "dirty": false,
     "created": 1727446056526.0,
@@ -13,15 +13,15 @@
         "tempName": "Untitled1",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "166,0",
-        "scrollLine": "162"
+        "cursorPosition": "320,0",
+        "scrollLine": "308"
     },
     "folds": "",
-    "lastKnownWriteTime": 1727451561,
+    "lastKnownWriteTime": 1727474397,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1727451561650,
+    "last_content_update": 1727474397111,
     "read_only": false,
     "read_only_alternatives": []
 }

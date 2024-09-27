@@ -169,13 +169,14 @@ grid.arrange(a1, a2, nrow = 2)
   # power 9 produced 43 MEs w/ some sig diff. But that's a lot of MEs. So let's constrict some, try 10. 
   # power 10 produced 31 MEs w/ some sig diff. 
   # power 12: 17 MEs, only 1 sig diff?
+  # so let's examien GO terms in modules between power 9 and 10. 
 
 
 
 # convert matrix to numeric
 norm.counts[] <- sapply(norm.counts, as.numeric)
 
-soft_power <- 12  ### SELECTED BY ABOVE 
+soft_power <- 10  ### SELECTED BY ABOVE 
 temp_cor <- cor
 cor <- WGCNA::cor
 
