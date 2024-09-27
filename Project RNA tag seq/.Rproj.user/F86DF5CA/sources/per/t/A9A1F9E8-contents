@@ -113,7 +113,7 @@ dds <- DESeqDataSetFromMatrix(countData = data.subset,
                               design = ~ 1) # not specifying model "because we need this DSeq data set to perform variance stabilizing transformation"
 
 
-## remove all genes with counts < 10 in more than 10% of samples -- here, same as DEseq2 guide
+## remove all genes with counts < 10 in more than 3 samples -- here, same as DEseq2 guide
 
 dds75 <- dds[rowSums(counts(dds) >= 10) >= 3,]
 nrow(dds75) #
@@ -152,7 +152,11 @@ LH_MEmagenta_limma$X <- NULL
 ### top 15 biggest logFC genes 
 LH_limma_results1 %>% 
   arrange(logFC) %>% 
-  head(15)
+  head(25)
+
+LH_limma_results1 %>% 
+  arrange(-logFC) %>% 
+  head(25)
 
 #visualize some favorites 
 
@@ -162,30 +166,50 @@ ggplot(normcounts.coldata.LH, aes(x=group,y=Hcrt, fill=group)) +
   stat_compare_means(method = "t.test") + 
   ggtitle("Hcrt")
 
-ggplot(normcounts.coldata.LH, aes(x=Hcrt,y=wt.rate.pct, color=group)) +
-  geom_smooth(method="lm") +
-  geom_point()
 
-ggplot(normcounts.coldata.LH, aes(x=Hcrt,y=food.eff, color=group)) +
-  geom_smooth(method="lm") +
-  geom_point()
+# hcrt - save as w400 h600
+ggplot(normcounts.coldata.LH, aes(group, Hcrt, fill=group)) +
+  stat_compare_means(method = "t.test", size = 6, label.x = 0.8) +
+  geom_boxplot(outlier.shape=NA) +
+  geom_jitter(size = 4, position=position_jitter(0.15)) + 
+  scale_fill_manual(values=c("blue3", "orange2")) +
+  labs(title="C. LH - Hcrt",x="Group", y = "Normalized gene expression") +
+  theme_classic() +
+  theme(axis.line = element_line(colour = 'black', size = 1),
+        axis.ticks = element_line(colour = "black", size = 1),
+        legend.position="none",
+        axis.text=element_text(size=16),
+        axis.title=element_text(size=18,face="bold"),
+        plot.title = element_text(size=24, hjust = 0.4)) 
 
-ggplot(normcounts.coldata.LH, aes(x=Hcrt,y=food.total, color=group)) +
-  geom_smooth(method="lm") +
-  geom_point()
 
-ggplot(normcounts.coldata.LH, aes(x=Hcrt,y=wt.day.15, color=group)) +
-  geom_smooth(method="lm") +
-  geom_point()
 
-ggplot(normcounts.coldata.LH, aes(x=Hcrt,y=total.fat, color=group)) +
-  geom_smooth(method="lm") +
-  geom_point()
 
-ggplot(normcounts.coldata.LH, aes(x=Hcrt,y=g.hoarded, color=group)) +
-  geom_smooth(method="lm") +
-  geom_point()
 
+# ggplot(normcounts.coldata.LH, aes(x=Hcrt,y=wt.rate.pct, color=group)) +
+#   geom_smooth(method="lm") +
+#   geom_point()
+# 
+# ggplot(normcounts.coldata.LH, aes(x=Hcrt,y=food.eff, color=group)) +
+#   geom_smooth(method="lm") +
+#   geom_point()
+# 
+# ggplot(normcounts.coldata.LH, aes(x=Hcrt,y=food.total, color=group)) +
+#   geom_smooth(method="lm") +
+#   geom_point()
+# 
+# ggplot(normcounts.coldata.LH, aes(x=Hcrt,y=wt.day.15, color=group)) +
+#   geom_smooth(method="lm") +
+#   geom_point()
+# 
+# ggplot(normcounts.coldata.LH, aes(x=Hcrt,y=total.fat, color=group)) +
+#   geom_smooth(method="lm") +
+#   geom_point()
+# 
+# ggplot(normcounts.coldata.LH, aes(x=Hcrt,y=g.hoarded, color=group)) +
+#   geom_smooth(method="lm") +
+#   geom_point()
+# 
 # ggscatter(normcounts.coldata.LH, x="Hcrt", y="wt.rate.pct", add="reg.line")+
 #   stat_cor(label.x = 8, size = 6) +
 #   scale_fill_manual(values=c("white", "darkgray")) +
@@ -200,57 +224,56 @@ ggplot(normcounts.coldata.LH, aes(x=Hcrt,y=g.hoarded, color=group)) +
 
 
 
-ggplot(normcounts.coldata.LH, aes(x=group,y=Npvf, fill=group)) +
-  geom_boxplot(outlier.shape = NA) +
-  geom_jitter(position = position_jitter(width = .1)) +
-  stat_compare_means(method = "t.test") + 
-  ggtitle("Npvf")
+
+# Mc3r - save as w400 h600
+ggplot(normcounts.coldata.LH, aes(group, Mc3r, fill=group)) +
+  stat_compare_means(method = "t.test", size = 6, label.x = 0.8) +
+  geom_boxplot(outlier.shape=NA) +
+  geom_jitter(size = 4, position=position_jitter(0.15)) + 
+  scale_fill_manual(values=c("blue3", "orange2")) +
+  labs(title="D. LH - Mc3r",x="Group", y = "Normalized gene expression") +
+  theme_classic() +
+  theme(axis.line = element_line(colour = 'black', size = 1),
+        axis.ticks = element_line(colour = "black", size = 1),
+        legend.position="none",
+        axis.text=element_text(size=16),
+        axis.title=element_text(size=18,face="bold"),
+        plot.title = element_text(size=24, hjust = 0.4)) 
 
 
 
 
-ggplot(normcounts.coldata.LH, aes(x=group,y=Mc3r, fill=group)) +
-  geom_boxplot(outlier.shape = NA) +
-  geom_jitter(position = position_jitter(width = .1)) +
-  stat_compare_means(method = "t.test") + 
-  ggtitle("Mc3r")
-
-ggplot(normcounts.coldata.LH, aes(x=Mc3r,y=wt.rate.pct, color=group)) +
-  geom_smooth(method="lm") +
-  geom_point()
-
-ggplot(normcounts.coldata.LH, aes(x=Mc3r,y=food.eff, color=group)) +
-  geom_smooth(method="lm") +
-  geom_point()
-
-ggplot(normcounts.coldata.LH, aes(x=Mc3r,y=food.total, color=group)) +
-  geom_smooth(method="lm") +
-  geom_point()
-
-ggplot(normcounts.coldata.LH, aes(x=Mc3r,y=wt.day.15, color=group)) +
-  geom_smooth(method="lm") +
-  geom_point()
-
-ggplot(normcounts.coldata.LH, aes(x=Mc3r,y=total.fat, color=group)) +
-  geom_smooth(method="lm") +
-  geom_point()
-
-ggplot(normcounts.coldata.LH, aes(x=Hcrt,y=g.hoarded, color=group)) +
-  geom_smooth(method="lm") +
-  geom_point()
+# Npvf - save as w400 h600
+ggplot(normcounts.coldata.LH, aes(group, Npvf, fill=group)) +
+  stat_compare_means(method = "t.test", size = 6, label.x = 0.8) +
+  geom_boxplot(outlier.shape=NA) +
+  geom_jitter(size = 4, position=position_jitter(0.15)) + 
+  scale_fill_manual(values=c("blue3", "orange2")) +
+  labs(title="E. LH - Npvf",x="Group", y = "Normalized gene expression") +
+  theme_classic() +
+  theme(axis.line = element_line(colour = 'black', size = 1),
+        axis.ticks = element_line(colour = "black", size = 1),
+        legend.position="none",
+        axis.text=element_text(size=16),
+        axis.title=element_text(size=18,face="bold"),
+        plot.title = element_text(size=24, hjust = 0.4)) 
 
 
 
-
-ggplot(normcounts.coldata.LH, aes(x=group,y=Gpr50, fill=group)) +
-  geom_boxplot(outlier.shape = NA) +
-  geom_jitter(position = position_jitter(width = .1)) +
-  stat_compare_means(method = "t.test") + 
-  ggtitle("Gpr50")
-
-
-
-
+# Gpr50 - save as w400 h600
+ggplot(normcounts.coldata.LH, aes(group, Gpr50, fill=group)) +
+  stat_compare_means(method = "t.test", size = 6, label.x = 0.8) +
+  geom_boxplot(outlier.shape=NA) +
+  geom_jitter(size = 4, position=position_jitter(0.15)) + 
+  scale_fill_manual(values=c("blue3", "orange2")) +
+  labs(title="F. LH - Gpr50",x="Group", y = "Normalized gene expression") +
+  theme_classic() +
+  theme(axis.line = element_line(colour = 'black', size = 1),
+        axis.ticks = element_line(colour = "black", size = 1),
+        legend.position="none",
+        axis.text=element_text(size=16),
+        axis.title=element_text(size=18,face="bold"),
+        plot.title = element_text(size=24, hjust = 0.4)) 
 
 
 
@@ -264,18 +287,36 @@ LH_MEyellow_limma %>%
 
 # visualize 
 
-ggplot(normcounts.coldata.LH, aes(x=group,y=Ntsr2, fill=group)) +
-  geom_boxplot(outlier.shape = NA) +
-  geom_jitter(position = position_jitter(width = .1)) +
-  stat_compare_means(method = "t.test") + 
-  ggtitle("Ntsr2")
+ggplot(normcounts.coldata.LH, aes(group, Stx1a, fill=group)) +
+  stat_compare_means(method = "t.test", size = 6, label.x = 0.8) +
+  geom_boxplot(outlier.shape=NA) +
+  geom_jitter(size = 4, position=position_jitter(0.15)) + 
+  scale_fill_manual(values=c("blue3", "orange2")) +
+  labs(title="C. LH - Stx1a",x="Group", y = "Normalized gene expression") +
+  theme_classic() +
+  theme(axis.line = element_line(colour = 'black', size = 1),
+        axis.ticks = element_line(colour = "black", size = 1),
+        legend.position="none",
+        axis.text=element_text(size=16),
+        axis.title=element_text(size=18,face="bold"),
+        plot.title = element_text(size=24, hjust = 0.4)) 
 
 
-ggplot(normcounts.coldata.LH, aes(x=group,y=Stx1a, fill=group)) +
-  geom_boxplot(outlier.shape = NA) +
-  geom_jitter(position = position_jitter(width = .1)) +
-  stat_compare_means(method = "t.test") + 
-  ggtitle("Stx1a")
+
+ggplot(normcounts.coldata.LH, aes(group, Slc9a3r2, fill=group)) +
+  stat_compare_means(method = "t.test", size = 6, label.x = 1.5) +
+  geom_boxplot(outlier.shape=NA) +
+  geom_jitter(size = 4, position=position_jitter(0.15)) + 
+  scale_fill_manual(values=c("blue3", "orange2")) +
+  labs(title="D. LH - Slc9a3r2",x="Group", y = "Normalized gene expression") +
+  theme_classic() +
+  theme(axis.line = element_line(colour = 'black', size = 1),
+        axis.ticks = element_line(colour = "black", size = 1),
+        legend.position="none",
+        axis.text=element_text(size=16),
+        axis.title=element_text(size=18,face="bold"),
+        plot.title = element_text(size=24, hjust = 0.4)) 
+
 
 
 
@@ -288,21 +329,36 @@ LH_MEmagenta_limma %>%
 
 # visualize 
 
-ggplot(normcounts.coldata.LH, aes(x=group,y=Ptgds, fill=group)) +
-  geom_boxplot(outlier.shape = NA) +
-  geom_jitter(position = position_jitter(width = .1)) +
-  stat_compare_means(method = "t.test") + 
-  ggtitle("Ptgds")
+ggplot(normcounts.coldata.LH, aes(group, Ptgds  , fill=group)) +
+  stat_compare_means(method = "t.test", size = 6, label.x = 1.5) +
+  geom_boxplot(outlier.shape=NA) +
+  geom_jitter(size = 4, position=position_jitter(0.15)) + 
+  scale_fill_manual(values=c("blue3", "orange2")) +
+  labs(title="E. LH - Ptgds",x="Group", y = "Normalized gene expression") +
+  theme_classic() +
+  theme(axis.line = element_line(colour = 'black', size = 1),
+        axis.ticks = element_line(colour = "black", size = 1),
+        legend.position="none",
+        axis.text=element_text(size=16),
+        axis.title=element_text(size=18,face="bold"),
+        plot.title = element_text(size=24, hjust = 0.4)) 
 
 
-ggplot(normcounts.coldata.LH, aes(x=group,y=Clip2, fill=group)) +
-  geom_boxplot(outlier.shape = NA) +
-  geom_jitter(position = position_jitter(width = .1)) +
-  stat_compare_means(method = "t.test") + 
-  ggtitle("Clip2")
+
+ggplot(normcounts.coldata.LH, aes(group, Clip2, fill=group)) +
+  stat_compare_means(method = "t.test", size = 6, label.x = 0.8) +
+  geom_boxplot(outlier.shape=NA) +
+  geom_jitter(size = 4, position=position_jitter(0.15)) + 
+  scale_fill_manual(values=c("blue3", "orange2")) +
+  labs(title="F. LH - Clip2",x="Group", y = "Normalized gene expression") +
+  theme_classic() +
+  theme(axis.line = element_line(colour = 'black', size = 1),
+        axis.ticks = element_line(colour = "black", size = 1),
+        legend.position="none",
+        axis.text=element_text(size=16),
+        axis.title=element_text(size=18,face="bold"),
+        plot.title = element_text(size=24, hjust = 0.4)) 
 
 
-
-#### AND (?) genes in strongest ME GO terms?
 
 
