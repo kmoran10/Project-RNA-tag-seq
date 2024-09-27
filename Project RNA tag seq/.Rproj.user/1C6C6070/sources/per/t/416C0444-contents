@@ -1,5 +1,5 @@
 
-# WGCNA for LH
+# WGCNA for ARC
 # BiocManager::install("")
 
 library(WGCNA)
@@ -19,9 +19,9 @@ source("functions/gettop10GO.R")
 
 allowWGCNAThreads()          # allow multi-threading (optional)
 
-data <- read.csv("ham_brain_data/LH_counts.csv")
+data <- read.csv("ham_brain_data/ARC_counts.csv")
 
-phenoData <- read.csv("ham_brain_data/LH_id.csv")
+phenoData <- read.csv("ham_brain_data/ARC_id.csv")
 
 data[1:10, 1:10]
 head(phenoData)
@@ -56,7 +56,7 @@ data <- data[gsg$goodGenes == TRUE,]
 # detect outlier samples - hierarchical clustering - method 1
 htree <- hclust(dist(t(data)), method = "average")
 plot(htree)
-# KM193 potentially seems like an outlier sample
+# no definite outliers - maybe 196?
 
 
 # pca - method 2 for finding outliers 
@@ -74,13 +74,13 @@ ggplot(pca.dat, aes(PC1, PC2)) +
   geom_text(label = rownames(pca.dat)) +
   labs(x = paste0('PC1: ', pca.var.percent[1], ' %'),
        y = paste0('PC2: ', pca.var.percent[2], ' %'))
-#KM193 again seems like a potential outlier 
+#larger variability, but no definite outlier  
 
 
 # exclude outlier samples
-samples.to.be.excluded <- c('KM193')
+samples.to.be.excluded <- c(NA)
 data.subset <- data[,!(colnames(data) %in% samples.to.be.excluded)]
-### ***  note in results that we exclude KM193 because of higher variance compared to all other samples 
+### ***  no exclusions here? 
 
 
 
@@ -118,7 +118,7 @@ dds <- DESeqDataSetFromMatrix(countData = data.subset,
 ## suggested by WGCNA on RNAseq FAQ
 
 dds75 <- dds[rowSums(counts(dds) >= 15) >= 15,]
-nrow(dds75) # 8409 genes
+nrow(dds75) # 9497 genes
 
 
 # perform variance stabilization
@@ -164,16 +164,17 @@ a2 <- ggplot(sft.data, aes(Power, mean.k., label = Power)) +
 
 
 grid.arrange(a1, a2, nrow = 2)
-# selecting a power of 12 since it seems to maximize around here and has minimal mean connectivity
-# 4 or 5 is where it crossed over R^2 of .8, but mean connectivity was still relatively high.
-# 10 could potentially work if this R^2 is "excessively high" for some reason. 
+# selecting a power of 10 since it seems to maximize around here and has minimal mean connectivity
+  # 8-12 could work tho? so we'll see how 10 goes. 
+    #nothing from 10 - let's try 8
+
 
 
 
 # convert matrix to numeric
 norm.counts[] <- sapply(norm.counts, as.numeric)
 
-soft_power <- 12 
+soft_power <- 8 
 temp_cor <- cor
 cor <- WGCNA::cor
 
@@ -298,12 +299,12 @@ colnames(heatmap.data2) <- new_column_names
 ## IN THE FOLLOWING: POSITIVE VALUES MEAN ME EXPRESSION IN HIGHER IN TRAIT CODED WITH 1 COMPARED TO TRAIT CODED WITH 0 - specifically positive = higher in stressed
 ### SAVE 550x800
 CorLevelPlot(heatmap.data2,
-             x = names(heatmap.data2)[15:15], #trait data
-             y = names(heatmap.data2)[1:14], #ME data
+             x = names(heatmap.data2)[13:13], #trait data
+             y = names(heatmap.data2)[1:12], #ME data
              col = c("blue3", "skyblue", "white", "#f7ab5e", "orange2"),
-             main = "A. LH - WGCNA Module Eigengenes") 
+             main = "A. ARC - WGCNA Module Eigengenes") 
 
-## so for LH, modules magenta and yellow are significantly altered by stress
+## so for ARC, modules magenta and yellow are significantly altered by stress
 
 module.gene.mapping <- as.data.frame(bwnet$colors)
 
@@ -348,7 +349,7 @@ gene.signf.corr.pvals %>%
   as.data.frame() %>% 
   arrange(V1) %>% 
   head(25)
-#top 25 genes in the LH sig associated with stress experience 
+#top 25 genes in the ARC sig associated with stress experience 
 ### NEED TO DO SOMETHING SIMILAR TO THIS *JUST* WITHIN SIG MODULES - GET "HIGHEST MM GENES"   ### basically take module.membership.measure.pvals, flip orientation, filter only relevant module, then arrange(V1) 
 
 
@@ -370,15 +371,15 @@ library(annotables)
 grcm38 <- grcm38
 source("functions/gettop10GO.R")
 
-#1st - pull LH_limma_results1 <- readRDS("results/LH_limma_results.RDS")
+#1st - pull ARC_limma_results1 <- readRDS("results/ARC_limma_results.RDS")
 #2nd - filter genes that are only in modules of interest - call them MEcolor
-#3rd - attach LH_limma_results1 to filteres MEcolor datasets
+#3rd - attach ARC_limma_results1 to filteres MEcolor datasets
 #4th - do GO analysis of merged MEcolor-limma datasets 
 #5th - and highest MM ranking of MEcolor datasets
 
 
 ## steps 1-3
-LH_limma_results1 <- readRDS("results/LH_limma_results.RDS")
+ARC_limma_results1 <- readRDS("results/ARC_limma_results.RDS")
 
 gene.signf.corr2 <- as.data.frame(gene.signf.corr)
 gene.signf.corr2 <- tibble::rownames_to_column(gene.signf.corr2, "symbol")
@@ -391,36 +392,36 @@ colnames(gene.signf.corr.pvals2)[2] <- "gene.signif.corr.pval"
 MEallcolors2 <- left_join(MEallcolors, gene.signf.corr2, by = "symbol") %>% 
   left_join(., gene.signf.corr.pvals2, by = "symbol")
 
-write.csv(MEallcolors2, "results/MEallcolors_LH.csv")
+write.csv(MEallcolors2, "results/MEallcolors_ARC.csv")
 
 
 
 MEyellow <- MEallcolors2 %>% 
   filter(MEcolor == "yellow")
 
-MEyellow.limma <- LH_limma_results1 %>% 
+MEyellow.limma <- ARC_limma_results1 %>% 
   left_join(MEyellow, by = "symbol") %>%
   filter(!is.na(MEcolor)) %>% 
   select(1,2,3,4,10,11,12,13)
 
-write.csv(MEyellow.limma, "results/LH_MEyellow_limma.csv")
+write.csv(MEyellow.limma, "results/ARC_MEyellow_limma.csv")
 
 
 MEmagenta <- MEallcolors2 %>% 
   filter(MEcolor == "magenta")
 
-MEmagenta.limma <- LH_limma_results1 %>% 
+MEmagenta.limma <- ARC_limma_results1 %>% 
   left_join(MEmagenta, by = "symbol") %>%
   filter(!is.na(MEcolor)) %>% 
   select(1,2,3,4,10,11,12,13)
 
-write.csv(MEmagenta.limma, "results/LH_MEmagenta_limma.csv")
+write.csv(MEmagenta.limma, "results/ARC_MEmagenta_limma.csv")
 
 ## GO ANALYSIS OF YELLOW MODULE
 gettop10GO(MEyellow.limma, my_showCategory) %>% 
-  mutate(comparison = "Control - Stress") -> GOterms_LH_yellow
+  mutate(comparison = "Control - Stress") -> GOterms_ARC_yellow
 
-write.csv(GOterms_LH_yellow, "results/GOterms_LH_yellow.csv")
+write.csv(GOterms_ARC_yellow, "results/GOterms_ARC_yellow.csv")
 
 ## HIGHEST MM OF YELLOW MODULE
 MEyellow.limma %>% 
@@ -432,9 +433,9 @@ MEyellow.limma %>%
 
 ## GO ANALYSIS OF MAGENTA MODULE
 gettop10GO(MEmagenta.limma, my_showCategory) %>% 
-  mutate(comparison = "Control - Stress") -> GOterms_LH_magenta
+  mutate(comparison = "Control - Stress") -> GOterms_ARC_magenta
 
-write.csv(GOterms_LH_magenta, "results/GOterms_LH_magenta.csv")
+write.csv(GOterms_ARC_magenta, "results/GOterms_ARC_magenta.csv")
 
 ## HIGHEST MM OF MAGENTA MODULE
 MEmagenta.limma %>% 

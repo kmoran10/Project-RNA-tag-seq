@@ -271,13 +271,37 @@ heatmap.data <- heatmap.data %>%
 ### NEED TO adjust this step depending on dimensions of heatmap.data
 names(heatmap.data)
 
+heatmap.data2 <- heatmap.data
+module.gene.mapping <- as.data.frame(bwnet$colors)
+MEallcolors <- tibble::rownames_to_column(module.gene.mapping, "symbol")
+colnames(MEallcolors)[2] <- "MEcolor"
+color_counts <- table(MEallcolors$MEcolor)
+column_names <- colnames(heatmap.data2)
+
+new_column_names <- sapply(column_names, function(col) {
+  # Extract the color part (e.g., "MEblack" -> "black")
+  color <- sub("ME", "", col)
+  
+  # If the color exists in the color_counts, add the count to the column name
+  if (color %in% names(color_counts)) {
+    paste0(col, "(", color_counts[color], ")")
+  } else {
+    col # Leave the column name unchanged if the color is not found
+  }
+})
+
+colnames(heatmap.data2) <- new_column_names
+
+
+### NEED TO adjust this step depending on dimensions of heatmap.data
+
 ## IN THE FOLLOWING: POSITIVE VALUES MEAN ME EXPRESSION IN HIGHER IN TRAIT CODED WITH 1 COMPARED TO TRAIT CODED WITH 0 - specifically positive = higher in stressed
 ### SAVE 550x800
-CorLevelPlot(heatmap.data,
-             x = names(heatmap.data)[15:15], #trait data
-             y = names(heatmap.data)[1:14], #ME data
+CorLevelPlot(heatmap.data2,
+             x = names(heatmap.data2)[15:15], #trait data
+             y = names(heatmap.data2)[1:14], #ME data
              col = c("blue3", "skyblue", "white", "#f7ab5e", "orange2"),
-             main = "WGCNA Module Eigengenes - LH") 
+             main = "A. LH - WGCNA Module Eigengenes") 
 
 ## so for LH, modules magenta and yellow are significantly altered by stress
 
@@ -355,8 +379,6 @@ source("functions/gettop10GO.R")
 
 ## steps 1-3
 LH_limma_results1 <- readRDS("results/LH_limma_results.RDS")
-MEallcolors <- tibble::rownames_to_column(module.gene.mapping, "symbol")
-colnames(MEallcolors)[2] <- "MEcolor"
 
 gene.signf.corr2 <- as.data.frame(gene.signf.corr)
 gene.signf.corr2 <- tibble::rownames_to_column(gene.signf.corr2, "symbol")
@@ -370,6 +392,7 @@ MEallcolors2 <- left_join(MEallcolors, gene.signf.corr2, by = "symbol") %>%
   left_join(., gene.signf.corr.pvals2, by = "symbol")
 
 write.csv(MEallcolors2, "results/MEallcolors_LH.csv")
+
 
 
 MEyellow <- MEallcolors2 %>% 

@@ -4,6 +4,8 @@ C:/R_Projects/Project-RNA-tag-seq/Project RNA tag seq/analysis/02_DEGs_GoAnalysi
 C:/R_Projects/Project-RNA-tag-seq/Project RNA tag seq/analysis/03_VolcanoPlots_ARC.R="833EB2C2"
 C:/R_Projects/Project-RNA-tag-seq/Project RNA tag seq/analysis/03_VolcanoPlots_DMH.R="2B2CEA1A"
 C:/R_Projects/Project-RNA-tag-seq/Project RNA tag seq/analysis/03_VolcanoPlots_LH.R="F7829E96"
+C:/R_Projects/Project-RNA-tag-seq/Project RNA tag seq/analysis/04_WGCNA_ARC.R="9C1A4979"
+C:/R_Projects/Project-RNA-tag-seq/Project RNA tag seq/analysis/04_WGCNA_DMH.R="F096E307"
 C:/R_Projects/Project-RNA-tag-seq/Project RNA tag seq/analysis/05_LH_pairwise_genes.R="DFA7272E"
 C:/R_Projects/Project-RNA-tag-seq/Project RNA tag seq/analysis/DESeq_LH.R="DA9AEF15"
 C:/R_Projects/Project-RNA-tag-seq/Project RNA tag seq/analysis/initial analysis_ham.R="67D18737"
