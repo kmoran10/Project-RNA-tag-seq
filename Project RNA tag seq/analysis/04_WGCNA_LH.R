@@ -254,7 +254,7 @@ nGenes <- ncol(norm.counts)
 module.trait.corr <- cor(module_eigengenes, traits, use = 'p')
 module.trait.corr.pvals <- corPvalueStudent(module.trait.corr, nSamples)
 
-View(module.trait.corr.pvals)
+#View(module.trait.corr.pvals)
 
 
 # visualize module-trait association as a heatmap
@@ -388,6 +388,9 @@ gene.signf.corr.pvals2 <- as.data.frame(gene.signf.corr.pvals)
 gene.signf.corr.pvals2 <- tibble::rownames_to_column(gene.signf.corr.pvals2, "symbol")
 colnames(gene.signf.corr.pvals2)[2] <- "gene.signif.corr.pval"
 
+module.membership.measure2 <- as.data.frame(module.membership.measure)
+module.membership.measure2 <- tibble::rownames_to_column(module.membership.measure2, "module")
+
 MEallcolors2 <- left_join(MEallcolors, gene.signf.corr2, by = "symbol") %>% 
   left_join(., gene.signf.corr.pvals2, by = "symbol")
 
@@ -423,11 +426,13 @@ gettop10GO(MEyellow.limma, my_showCategory) %>%
 write.csv(GOterms_LH_yellow, "results/GOterms_LH_yellow.csv")
 
 ## HIGHEST MM OF YELLOW MODULE
-MEyellow.limma %>% 
-  arrange(gene.signif.corr.pval) %>% 
-  head(5)
-
-
+MMyellow <- module.membership.measure2 %>% 
+  filter(module == "MEyellow") %>% 
+  gather(., gene, MM)
+MMyellow <- MMyellow[-1,]
+MMyellow %>% 
+  arrange(desc(MM)) %>% 
+  head(10)
 
 
 ## GO ANALYSIS OF MAGENTA MODULE
@@ -437,9 +442,13 @@ gettop10GO(MEmagenta.limma, my_showCategory) %>%
 write.csv(GOterms_LH_magenta, "results/GOterms_LH_magenta.csv")
 
 ## HIGHEST MM OF MAGENTA MODULE
-MEmagenta.limma %>% 
-  arrange(gene.signif.corr.pval) %>% 
-  head(5)
+MMmagenta <- module.membership.measure2 %>% 
+  filter(module == "MEmagenta") %>% 
+  gather(., gene, MM)
+MMmagenta <- MMmagenta[-1,]
+MMmagenta %>% 
+  arrange(desc(MM)) %>% 
+  head(10)
 
 
 

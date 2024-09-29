@@ -1,0 +1,27 @@
+{
+    "id": "EAF18E31",
+    "path": "C:/R_Projects/Project-RNA-tag-seq/Project RNA tag seq/analysis/05_ARC_pairwise_genes.R",
+    "project_path": "analysis/05_ARC_pairwise_genes.R",
+    "type": "r_source",
+    "hash": "2638347948",
+    "contents": "",
+    "dirty": false,
+    "created": 1727588698153.0,
+    "source_on_save": false,
+    "relative_order": 4,
+    "properties": {
+        "tempName": "Untitled1",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "354,0",
+        "scrollLine": "328"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1727591171,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1727591171648,
+    "read_only": false,
+    "read_only_alternatives": []
+}
