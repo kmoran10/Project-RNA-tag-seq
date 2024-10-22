@@ -244,6 +244,7 @@ ggplot(normcounts.coldata.LH, aes(group, Mc3r, fill=group)) +
 
 
 # Npvf - save as w400 h600
+
 ggplot(normcounts.coldata.LH, aes(group, Npvf, fill=group)) +
   stat_compare_means(method = "t.test", size = 6, label.x = 0.8) +
   geom_boxplot(outlier.shape=NA) +
@@ -282,9 +283,9 @@ ggplot(normcounts.coldata.LH, aes(group, Gpr50, fill=group)) +
 
 
 # visualize 
-
+LH_MEyellow_limma %>% filter(symbol == "Mog")
 ggplot(normcounts.coldata.LH, aes(group, Mog, fill=group)) +
-  stat_compare_means(method = "t.test", size = 6, label.x = 1.5) +
+  annotate("text", x = "Stress", y = 10.6, label = "eFDR == 0.054", size = 6, parse = TRUE) +
   geom_boxplot(outlier.shape=NA) +
   geom_jitter(size = 4, position=position_jitter(0.15)) + 
   scale_fill_manual(values=c("blue3", "orange2")) +

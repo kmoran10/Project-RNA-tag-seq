@@ -149,7 +149,7 @@ LH_MEmagenta_limma <- read.csv("results/LH_MEmagenta_limma.csv") #HIGHER express
 LH_MEmagenta_limma$X <- NULL
 
 
-### top 15 biggest logFC genes 
+### top 50 biggest logFC genes 
 LH_limma_results1 %>% 
   arrange(logFC) %>% 
   head(25)
@@ -244,6 +244,7 @@ ggplot(normcounts.coldata.LH, aes(group, Mc3r, fill=group)) +
 
 
 # Npvf - save as w400 h600
+
 ggplot(normcounts.coldata.LH, aes(group, Npvf, fill=group)) +
   stat_compare_means(method = "t.test", size = 6, label.x = 0.8) +
   geom_boxplot(outlier.shape=NA) +
@@ -280,19 +281,15 @@ ggplot(normcounts.coldata.LH, aes(group, Gpr50, fill=group)) +
 
 #### Pairwise of High ME MM genes - yellow
 
-# find these
-LH_MEyellow_limma %>% 
-  arrange(gene.signif.corr.pval) %>% 
-  head(5)
 
 # visualize 
-
-ggplot(normcounts.coldata.LH, aes(group, Stx1a, fill=group)) +
-  stat_compare_means(method = "t.test", size = 6, label.x = 0.8) +
+LH_MEyellow_limma %>% filter(symbol == "Mog")
+ggplot(normcounts.coldata.LH, aes(group, Mog, fill=group)) +
+  annotate("text", x = "Stress", y = 10.6, label = "eFDR == 0.054", size = 6, parse = TRUE) +
   geom_boxplot(outlier.shape=NA) +
   geom_jitter(size = 4, position=position_jitter(0.15)) + 
   scale_fill_manual(values=c("blue3", "orange2")) +
-  labs(title="C. LH - Stx1a",x="Group", y = "Normalized gene expression") +
+  labs(title="C. LH - Mog",x="Group", y = "Normalized gene expression") +
   theme_classic() +
   theme(axis.line = element_line(colour = 'black', size = 1),
         axis.ticks = element_line(colour = "black", size = 1),
@@ -303,12 +300,12 @@ ggplot(normcounts.coldata.LH, aes(group, Stx1a, fill=group)) +
 
 
 
-ggplot(normcounts.coldata.LH, aes(group, Slc9a3r2, fill=group)) +
+ggplot(normcounts.coldata.LH, aes(group, Cldn11, fill=group)) +
   stat_compare_means(method = "t.test", size = 6, label.x = 1.5) +
   geom_boxplot(outlier.shape=NA) +
   geom_jitter(size = 4, position=position_jitter(0.15)) + 
   scale_fill_manual(values=c("blue3", "orange2")) +
-  labs(title="D. LH - Slc9a3r2",x="Group", y = "Normalized gene expression") +
+  labs(title="D. LH - Cldn11",x="Group", y = "Normalized gene expression") +
   theme_classic() +
   theme(axis.line = element_line(colour = 'black', size = 1),
         axis.ticks = element_line(colour = "black", size = 1),
@@ -322,19 +319,14 @@ ggplot(normcounts.coldata.LH, aes(group, Slc9a3r2, fill=group)) +
 
 #### Pairwise of High ME MM genes - magenta
 
-# find these
-LH_MEmagenta_limma %>% 
-  arrange(gene.signif.corr.pval) %>% 
-  head(5)
-
 # visualize 
 
-ggplot(normcounts.coldata.LH, aes(group, Ptgds  , fill=group)) +
-  stat_compare_means(method = "t.test", size = 6, label.x = 1.5) +
+ggplot(normcounts.coldata.LH, aes(group, Cartpt  , fill=group)) +
+  stat_compare_means(method = "t.test", size = 6, label.x = 0.8) +
   geom_boxplot(outlier.shape=NA) +
   geom_jitter(size = 4, position=position_jitter(0.15)) + 
   scale_fill_manual(values=c("blue3", "orange2")) +
-  labs(title="E. LH - Ptgds",x="Group", y = "Normalized gene expression") +
+  labs(title="E. LH - Cartpt",x="Group", y = "Normalized gene expression") +
   theme_classic() +
   theme(axis.line = element_line(colour = 'black', size = 1),
         axis.ticks = element_line(colour = "black", size = 1),
@@ -345,12 +337,12 @@ ggplot(normcounts.coldata.LH, aes(group, Ptgds  , fill=group)) +
 
 
 
-ggplot(normcounts.coldata.LH, aes(group, Clip2, fill=group)) +
+ggplot(normcounts.coldata.LH, aes(group, Basp1, fill=group)) +
   stat_compare_means(method = "t.test", size = 6, label.x = 0.8) +
   geom_boxplot(outlier.shape=NA) +
   geom_jitter(size = 4, position=position_jitter(0.15)) + 
   scale_fill_manual(values=c("blue3", "orange2")) +
-  labs(title="F. LH - Clip2",x="Group", y = "Normalized gene expression") +
+  labs(title="F. LH - Basp1",x="Group", y = "Normalized gene expression") +
   theme_classic() +
   theme(axis.line = element_line(colour = 'black', size = 1),
         axis.ticks = element_line(colour = "black", size = 1),
