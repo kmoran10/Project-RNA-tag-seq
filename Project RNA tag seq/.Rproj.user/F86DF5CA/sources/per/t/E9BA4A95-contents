@@ -272,6 +272,8 @@ heatmap.data <- heatmap.data %>%
 names(heatmap.data)
 
 ## IN THE FOLLOWING: POSITIVE VALUES MEAN ME EXPRESSION IN HIGHER IN TRAIT CODED WITH 1 COMPARED TO TRAIT CODED WITH 0 
+### SAVE 550x800
+
 CorLevelPlot(heatmap.data,
              x = names(heatmap.data)[15:15], #trait data
              y = names(heatmap.data)[1:14], #ME data

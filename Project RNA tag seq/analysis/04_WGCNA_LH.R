@@ -254,7 +254,7 @@ nGenes <- ncol(norm.counts)
 module.trait.corr <- cor(module_eigengenes, traits, use = 'p')
 module.trait.corr.pvals <- corPvalueStudent(module.trait.corr, nSamples)
 
-#View(module.trait.corr.pvals)
+View(module.trait.corr.pvals)
 
 
 # visualize module-trait association as a heatmap
@@ -271,37 +271,13 @@ heatmap.data <- heatmap.data %>%
 ### NEED TO adjust this step depending on dimensions of heatmap.data
 names(heatmap.data)
 
-heatmap.data2 <- heatmap.data
-module.gene.mapping <- as.data.frame(bwnet$colors)
-MEallcolors <- tibble::rownames_to_column(module.gene.mapping, "symbol")
-colnames(MEallcolors)[2] <- "MEcolor"
-color_counts <- table(MEallcolors$MEcolor)
-column_names <- colnames(heatmap.data2)
-
-new_column_names <- sapply(column_names, function(col) {
-  # Extract the color part (e.g., "MEblack" -> "black")
-  color <- sub("ME", "", col)
-  
-  # If the color exists in the color_counts, add the count to the column name
-  if (color %in% names(color_counts)) {
-    paste0(col, "(", color_counts[color], ")")
-  } else {
-    col # Leave the column name unchanged if the color is not found
-  }
-})
-
-colnames(heatmap.data2) <- new_column_names
-
-
-### NEED TO adjust this step depending on dimensions of heatmap.data
-
-## IN THE FOLLOWING: POSITIVE VALUES MEAN ME EXPRESSION IN HIGHER IN TRAIT CODED WITH 1 COMPARED TO TRAIT CODED WITH 0 - specifically positive = higher in stressed
+## IN THE FOLLOWING: POSITIVE VALUES MEAN ME EXPRESSION IN HIGHER IN TRAIT CODED WITH 1 COMPARED TO TRAIT CODED WITH 0 
 ### SAVE 550x800
-CorLevelPlot(heatmap.data2,
-             x = names(heatmap.data2)[15:15], #trait data
-             y = names(heatmap.data2)[1:14], #ME data
-             col = c("blue3", "skyblue", "white", "#f7ab5e", "orange2"),
-             main = "A. LH - WGCNA Module Eigengenes") 
+
+CorLevelPlot(heatmap.data,
+             x = names(heatmap.data)[15:15], #trait data
+             y = names(heatmap.data)[1:14], #ME data
+             col = c("blue1", "skyblue", "white", "pink", "red"))
 
 ## so for LH, modules magenta and yellow are significantly altered by stress
 
@@ -379,6 +355,8 @@ source("functions/gettop10GO.R")
 
 ## steps 1-3
 LH_limma_results1 <- readRDS("results/LH_limma_results.RDS")
+MEallcolors <- tibble::rownames_to_column(module.gene.mapping, "symbol")
+colnames(MEallcolors)[2] <- "MEcolor"
 
 gene.signf.corr2 <- as.data.frame(gene.signf.corr)
 gene.signf.corr2 <- tibble::rownames_to_column(gene.signf.corr2, "symbol")
@@ -388,14 +366,10 @@ gene.signf.corr.pvals2 <- as.data.frame(gene.signf.corr.pvals)
 gene.signf.corr.pvals2 <- tibble::rownames_to_column(gene.signf.corr.pvals2, "symbol")
 colnames(gene.signf.corr.pvals2)[2] <- "gene.signif.corr.pval"
 
-module.membership.measure2 <- as.data.frame(module.membership.measure)
-module.membership.measure2 <- tibble::rownames_to_column(module.membership.measure2, "module")
-
 MEallcolors2 <- left_join(MEallcolors, gene.signf.corr2, by = "symbol") %>% 
   left_join(., gene.signf.corr.pvals2, by = "symbol")
 
 write.csv(MEallcolors2, "results/MEallcolors_LH.csv")
-
 
 
 MEyellow <- MEallcolors2 %>% 
@@ -426,13 +400,11 @@ gettop10GO(MEyellow.limma, my_showCategory) %>%
 write.csv(GOterms_LH_yellow, "results/GOterms_LH_yellow.csv")
 
 ## HIGHEST MM OF YELLOW MODULE
-MMyellow <- module.membership.measure2 %>% 
-  filter(module == "MEyellow") %>% 
-  gather(., gene, MM)
-MMyellow <- MMyellow[-1,]
-MMyellow %>% 
-  arrange(desc(MM)) %>% 
-  head(10)
+MEyellow.limma %>% 
+  arrange(gene.signif.corr.pval) %>% 
+  head(5)
+
+
 
 
 ## GO ANALYSIS OF MAGENTA MODULE
@@ -442,13 +414,9 @@ gettop10GO(MEmagenta.limma, my_showCategory) %>%
 write.csv(GOterms_LH_magenta, "results/GOterms_LH_magenta.csv")
 
 ## HIGHEST MM OF MAGENTA MODULE
-MMmagenta <- module.membership.measure2 %>% 
-  filter(module == "MEmagenta") %>% 
-  gather(., gene, MM)
-MMmagenta <- MMmagenta[-1,]
-MMmagenta %>% 
-  arrange(desc(MM)) %>% 
-  head(10)
+MEmagenta.limma %>% 
+  arrange(gene.signif.corr.pval) %>% 
+  head(5)
 
 
 
