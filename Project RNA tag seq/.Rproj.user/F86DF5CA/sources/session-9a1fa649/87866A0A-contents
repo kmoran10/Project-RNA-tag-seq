@@ -1,5 +1,5 @@
 
-# WGCNA for LH
+# WGCNA for ARC --------- TESTING RESULTS IF REMOVE "OUTLIER-Y" SAMPLES
 # BiocManager::install("")
 
 library(WGCNA)
@@ -19,9 +19,9 @@ source("functions/gettop10GO.R")
 
 allowWGCNAThreads()          # allow multi-threading (optional)
 
-data <- read.csv("ham_brain_data/LH_counts.csv")
+data <- read.csv("ham_brain_data/ARC_counts.csv")
 
-phenoData <- read.csv("ham_brain_data/LH_id.csv")
+phenoData <- read.csv("ham_brain_data/ARC_id.csv")
 
 data[1:10, 1:10]
 head(phenoData)
@@ -56,7 +56,8 @@ data <- data[gsg$goodGenes == TRUE,]
 # detect outlier samples - hierarchical clustering - method 1
 htree <- hclust(dist(t(data)), method = "average")
 plot(htree)
-# KM193 potentially seems like an outlier sample
+# this is a weird one. two somewhat distinct trees. But maybe 196 and 207 are outliers?
+
 
 
 # pca - method 2 for finding outliers 
@@ -74,13 +75,16 @@ ggplot(pca.dat, aes(PC1, PC2)) +
   geom_text(label = rownames(pca.dat)) +
   labs(x = paste0('PC1: ', pca.var.percent[1], ' %'),
        y = paste0('PC2: ', pca.var.percent[2], ' %'))
-#KM193 again seems like a potential outlier 
+# here, seems like 210, 193, and maybe 196?
 
+
+#so 196 out for sure
+# but we'll start with 196, 193, and 210 out
 
 # exclude outlier samples
-samples.to.be.excluded <- c('KM193')
+samples.to.be.excluded <- c("KM193","KM196","KM210")
 data.subset <- data[,!(colnames(data) %in% samples.to.be.excluded)]
-### ***  note in results that we exclude KM193 because of higher variance compared to all other samples 
+### ***  note removed outliers 
 
 
 
@@ -118,7 +122,7 @@ dds <- DESeqDataSetFromMatrix(countData = data.subset,
 ## suggested by WGCNA on RNAseq FAQ
 
 dds75 <- dds[rowSums(counts(dds) >= 15) >= 15,]
-nrow(dds75) # 8409 genes
+nrow(dds75) # 9193 genes
 
 
 # perform variance stabilization
@@ -164,16 +168,20 @@ a2 <- ggplot(sft.data, aes(Power, mean.k., label = Power)) +
 
 
 grid.arrange(a1, a2, nrow = 2)
-# selecting a power of 12 since it seems to maximize around here and has minimal mean connectivity
-# 4 or 5 is where it crossed over R^2 of .8, but mean connectivity was still relatively high.
-# 10 could potentially work if this R^2 is "excessively high" for some reason. 
+##### THIS PART NEEDS TO ADJUST PER ROI ANALYSIS 
+# 6-10 could work. even as low as 4?
+  # start with 6 - 3 sig diff modules out of 11
+  # check 10 - 2 sig dif MEs out of 12. 
+  # hm, lets try 4
+  
+
 
 
 
 # convert matrix to numeric
 norm.counts[] <- sapply(norm.counts, as.numeric)
 
-soft_power <- 12 
+soft_power <- 6  ### SELECTED BY ABOVE 
 temp_cor <- cor
 cor <- WGCNA::cor
 
@@ -254,7 +262,7 @@ nGenes <- ncol(norm.counts)
 module.trait.corr <- cor(module_eigengenes, traits, use = 'p')
 module.trait.corr.pvals <- corPvalueStudent(module.trait.corr, nSamples)
 
-View(module.trait.corr.pvals)
+#View(module.trait.corr.pvals)
 
 
 # visualize module-trait association as a heatmap
@@ -271,30 +279,69 @@ heatmap.data <- heatmap.data %>%
 ### NEED TO adjust this step depending on dimensions of heatmap.data
 names(heatmap.data)
 
-## IN THE FOLLOWING: POSITIVE VALUES MEAN ME EXPRESSION IN HIGHER IN TRAIT CODED WITH 1 COMPARED TO TRAIT CODED WITH 0 
+heatmap.data2 <- heatmap.data
+module.gene.mapping <- as.data.frame(bwnet$colors)
+MEallcolors <- tibble::rownames_to_column(module.gene.mapping, "symbol")
+colnames(MEallcolors)[2] <- "MEcolor"
+color_counts <- table(MEallcolors$MEcolor)
+column_names <- colnames(heatmap.data2)
+
+new_column_names <- sapply(column_names, function(col) {
+  # Extract the color part (e.g., "MEblack" -> "black")
+  color <- sub("ME", "", col)
+  
+  # If the color exists in the color_counts, add the count to the column name
+  if (color %in% names(color_counts)) {
+    paste0(col, "(", color_counts[color], ")")
+  } else {
+    col # Leave the column name unchanged if the color is not found
+  }
+})
+
+colnames(heatmap.data2) <- new_column_names
+
+names(heatmap.data2)
+# power 6 - 11 MEs? some def too big tho? -- BUT 3 are sig diff? 
+# power 10 - 12 MEs - only 2 sig difs?
+# power 4 only 13 MEs??? - 2 sig dif.
+# stick with 6 i guess
+
+
+
+### NEED TO adjust this step depending on dimensions of heatmap.data
+
+## IN THE FOLLOWING: POSITIVE VALUES MEAN ME EXPRESSION IS HIGHER IN TRAIT CODED WITH 1 COMPARED TO TRAIT CODED WITH 0 - specifically positive = higher in stressed
 ### SAVE 550x800
+CorLevelPlot(heatmap.data2,
+             x = names(heatmap.data2)[12:12], #trait data
+             y = names(heatmap.data2)[1:11], #ME data
+             col = c("blue3", "skyblue", "white", "#f7ab5e", "orange2"),
+             main = "A. ARC - WGCNA Module Eigengenes") 
 
-CorLevelPlot(heatmap.data,
-             x = names(heatmap.data)[15:15], #trait data
-             y = names(heatmap.data)[1:14], #ME data
-             col = c("blue1", "skyblue", "white", "pink", "red"))
-
-## so for LH, modules magenta and yellow are significantly altered by stress
+## so for ARC, modules yellow, purple, and blue are significantly altered by stress
 
 module.gene.mapping <- as.data.frame(bwnet$colors)
+
+
+
 
 ## FROM HERE, CAN PERFORM FURTHER ANALYSIS ON GENES IN IMPORTANT MODULES - the following lists the genes in relevant modules that are selected from above analysis to be modules that are differentially expressed between groups
 
 
 ## THIS ME has LOWER expression in Stress
-module.gene.mapping %>% 
-  filter(`bwnet$colors` == 'yellow') %>% 
+module.gene.mapping %>%
+  filter(`bwnet$colors` == 'yellow') %>%
   rownames()
 
+module.gene.mapping %>%
+  filter(`bwnet$colors` == 'purple') %>%
+  rownames
+
 ## THIS ME has HIGHER expression in Stress
-module.gene.mapping %>% 
-  filter(`bwnet$colors` == 'magenta') %>% 
+module.gene.mapping %>%
+  filter(`bwnet$colors` == 'blue') %>%
   rownames()
+
 
 
 # 6B. Intramodular analysis: Identifying driver genes ---------------
@@ -303,7 +350,7 @@ module.gene.mapping %>%
 
 # Calculate the module membership and the associated p-values
 
-# The module membership/intramodular connectivity is calculated as the correlation of the eigengene and the gene expression profile. 
+# The module membership/intramodular connectivity is calculated as the correlation of the eigengene and the gene expression profile.
 # This quantifies the similarity of all genes on the array to every module.
 
 module.membership.measure <- cor(module_eigengenes, norm.counts, use = 'p')
@@ -320,22 +367,22 @@ gene.signf.corr <- cor(norm.counts, traits$stress_bin, use = 'p')
 gene.signf.corr.pvals <- corPvalueStudent(gene.signf.corr, nSamples)
 
 
-gene.signf.corr.pvals %>% 
-  as.data.frame() %>% 
-  arrange(V1) %>% 
+gene.signf.corr.pvals %>%
+  as.data.frame() %>%
+  arrange(V1) %>%
   head(25)
-#top 25 genes in the LH sig associated with stress experience 
-### NEED TO DO SOMETHING SIMILAR TO THIS *JUST* WITHIN SIG MODULES - GET "HIGHEST MM GENES"   ### basically take module.membership.measure.pvals, flip orientation, filter only relevant module, then arrange(V1) 
+#top 25 genes in the ARC sig associated with stress experience
+### NEED TO DO SOMETHING SIMILAR TO THIS *JUST* WITHIN SIG MODULES - GET "HIGHEST MM GENES"   ### basically take module.membership.measure.pvals, flip orientation, filter only relevant module, then arrange(V1)
 
 
 
-# Using the gene significance you can identify genes that have a high significance for trait of interest 
+# Using the gene significance you can identify genes that have a high significance for trait of interest
 # Using the module membership measures you can identify genes with high module membership in interesting modules.
 
 
 
 
-#### FOLLOWUP ANALYSIS OF VARIOUS THINGS FOUND ABOVE 
+#### FOLLOWUP ANALYSIS OF VARIOUS THINGS FOUND ABOVE
 
 
 library(clusterProfiler)
@@ -346,17 +393,15 @@ library(annotables)
 grcm38 <- grcm38
 source("functions/gettop10GO.R")
 
-#1st - pull LH_limma_results1 <- readRDS("results/LH_limma_results.RDS")
+#1st - pull ARC_limma_results1 <- readRDS("results/ARC_limma_results.RDS")
 #2nd - filter genes that are only in modules of interest - call them MEcolor
-#3rd - attach LH_limma_results1 to filteres MEcolor datasets
-#4th - do GO analysis of merged MEcolor-limma datasets 
+#3rd - attach ARC_limma_results1 to filteres MEcolor datasets
+#4th - do GO analysis of merged MEcolor-limma datasets
 #5th - and highest MM ranking of MEcolor datasets
 
 
 ## steps 1-3
-LH_limma_results1 <- readRDS("results/LH_limma_results.RDS")
-MEallcolors <- tibble::rownames_to_column(module.gene.mapping, "symbol")
-colnames(MEallcolors)[2] <- "MEcolor"
+ARC_limma_results1 <- readRDS("results/ARC_limma_results.RDS")
 
 gene.signf.corr2 <- as.data.frame(gene.signf.corr)
 gene.signf.corr2 <- tibble::rownames_to_column(gene.signf.corr2, "symbol")
@@ -366,64 +411,109 @@ gene.signf.corr.pvals2 <- as.data.frame(gene.signf.corr.pvals)
 gene.signf.corr.pvals2 <- tibble::rownames_to_column(gene.signf.corr.pvals2, "symbol")
 colnames(gene.signf.corr.pvals2)[2] <- "gene.signif.corr.pval"
 
-MEallcolors2 <- left_join(MEallcolors, gene.signf.corr2, by = "symbol") %>% 
+MEallcolors2 <- left_join(MEallcolors, gene.signf.corr2, by = "symbol") %>%
   left_join(., gene.signf.corr.pvals2, by = "symbol")
 
-write.csv(MEallcolors2, "results/MEallcolors_LH.csv")
+write.csv(MEallcolors2, "results/MEallcolors_ARC.csv")
+
+module.membership.measure2 <- as.data.frame(module.membership.measure)
+module.membership.measure2 <- tibble::rownames_to_column(module.membership.measure2, "module")
 
 
-MEyellow <- MEallcolors2 %>% 
+
+### down in stressed  yellow, purple
+### up in stressed    blue
+
+
+
+MEyellow <- MEallcolors2 %>%
   filter(MEcolor == "yellow")
 
-MEyellow.limma <- LH_limma_results1 %>% 
+MEyellow.limma <- ARC_limma_results1 %>%
   left_join(MEyellow, by = "symbol") %>%
-  filter(!is.na(MEcolor)) %>% 
+  filter(!is.na(MEcolor)) %>%
   select(1,2,3,4,10,11,12,13)
 
-write.csv(MEyellow.limma, "results/LH_MEyellow_limma.csv")
+write.csv(MEyellow.limma, "results/ARC_MEyellow_limma.csv")
 
 
-MEmagenta <- MEallcolors2 %>% 
-  filter(MEcolor == "magenta")
+MEpurple <- MEallcolors2 %>%
+  filter(MEcolor == "purple")
 
-MEmagenta.limma <- LH_limma_results1 %>% 
-  left_join(MEmagenta, by = "symbol") %>%
-  filter(!is.na(MEcolor)) %>% 
+MEpurple.limma <- ARC_limma_results1 %>%
+  left_join(MEpurple, by = "symbol") %>%
+  filter(!is.na(MEcolor)) %>%
   select(1,2,3,4,10,11,12,13)
 
-write.csv(MEmagenta.limma, "results/LH_MEmagenta_limma.csv")
-
-## GO ANALYSIS OF YELLOW MODULE
-gettop10GO(MEyellow.limma, my_showCategory) %>% 
-  mutate(comparison = "Control - Stress") -> GOterms_LH_yellow
-
-write.csv(GOterms_LH_yellow, "results/GOterms_LH_yellow.csv")
-
-## HIGHEST MM OF YELLOW MODULE
-MEyellow.limma %>% 
-  arrange(gene.signif.corr.pval) %>% 
-  head(5)
+write.csv(MEpurple.limma, "results/ARC_MEpurple_limma.csv")
 
 
+MEblue <- MEallcolors2 %>%
+  filter(MEcolor == "blue")
 
+MEblue.limma <- ARC_limma_results1 %>%
+  left_join(MEblue, by = "symbol") %>%
+  filter(!is.na(MEcolor)) %>%
+  select(1,2,3,4,10,11,12,13)
 
-## GO ANALYSIS OF MAGENTA MODULE
-gettop10GO(MEmagenta.limma, my_showCategory) %>% 
-  mutate(comparison = "Control - Stress") -> GOterms_LH_magenta
-
-write.csv(GOterms_LH_magenta, "results/GOterms_LH_magenta.csv")
-
-## HIGHEST MM OF MAGENTA MODULE
-MEmagenta.limma %>% 
-  arrange(gene.signif.corr.pval) %>% 
-  head(5)
+write.csv(MEblue.limma, "results/ARC_MEblue_limma.csv")
 
 
 
 
+## GO ANALYSIS OF yellow MODULE
+gettop10GO(MEyellow.limma, my_showCategory) %>%
+  mutate(comparison = "Control - Stress") -> GOterms_ARC_yellow
+
+View(GOterms_ARC_yellow)
+
+write.csv(GOterms_ARC_yellow, "results/GOterms_ARC_yellow.csv")
+
+## HIGHEST MM OF yellow MODULE
+MMyellow <- module.membership.measure2 %>% 
+  filter(module == "MEyellow") %>% 
+  gather(., gene, MM)
+MMyellow <- MMyellow[-1,]
+MMyellow %>% 
+  arrange(desc(MM)) %>% 
+  head(10)
 
 
 
 
+## GO ANALYSIS OF purple MODULE
+gettop10GO(MEpurple.limma, my_showCategory) %>%
+  mutate(comparison = "Control - Stress") -> GOterms_ARC_purple
+
+View(GOterms_ARC_purple)
+
+write.csv(GOterms_ARC_purple, "results/GOterms_ARC_purple.csv")
+
+## HIGHEST MM OF purple MODULE
+MMpurple <- module.membership.measure2 %>% 
+  filter(module == "MEpurple") %>% 
+  gather(., gene, MM)
+MMpurple <- MMpurple[-1,]
+MMpurple %>% 
+  arrange(desc(MM)) %>% 
+  head(10)
 
 
+
+
+## GO ANALYSIS OF blue MODULE
+gettop10GO(MEblue.limma, my_showCategory) %>%
+  mutate(comparison = "Control - Stress") -> GOterms_ARC_blue
+
+View(GOterms_ARC_blue)
+
+write.csv(GOterms_ARC_blue, "results/GOterms_ARC_blue.csv")
+
+## HIGHEST MM OF blue MODULE
+MMblue <- module.membership.measure2 %>% 
+  filter(module == "MEblue") %>% 
+  gather(., gene, MM)
+MMblue <- MMblue[-1,]
+MMblue %>% 
+  arrange(desc(MM)) %>% 
+  head(10)
