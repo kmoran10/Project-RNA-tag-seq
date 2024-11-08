@@ -521,3 +521,93 @@ MMblue <- MMblue[-1,]
 MMblue %>% 
   arrange(desc(MM)) %>% 
   head(10)
+
+
+
+
+
+
+
+#### Module boxplots 
+source("functions/geom_boxjitter.R")
+
+
+
+MEdf <- as.data.frame(module_eigengenes) %>% 
+  tibble::rownames_to_column(., "subject")
+
+cdgrp <- as.data.frame(colData) %>% 
+  tibble::rownames_to_column(., "subject") %>% 
+  select(subject, group)
+
+MEdf2 <- left_join(MEdf, cdgrp, by="subject")
+
+# yellow  - save 325x500
+MEdf2 %>%
+  ggplot(aes(group,MEyellow, fill = group))+
+  geom_boxjitter(outlier.color = NA, jitter.shape = 21, 
+                 alpha = 1,
+                 width = 0.5,
+                 jitter.height = 0.02, jitter.width = 0.02, errorbar.draw = TRUE,
+                 position = position_dodge(0.8)) +
+  scale_fill_manual(values=c("blue3", "darkorange")) +
+  labs(title="Yellow:
+365 genes",x="Group", y = "Module Eigengene") +
+  theme_classic() +
+  theme(axis.line = element_line(colour = 'black', size = 1),
+        axis.ticks = element_line(colour = "black", size = 1),
+        legend.position="none",
+        axis.text=element_text(size=16),
+        axis.title=element_text(size=18,face="bold"),
+        plot.title = element_text(size=24, hjust = 0.4)) 
+
+
+
+# Purple 325 x 500
+MEdf2 %>%
+  ggplot(aes(group,MEpurple, fill = group))+
+  geom_boxjitter(outlier.color = NA, jitter.shape = 21, 
+                 alpha = 1,
+                 width = 0.5,
+                 jitter.height = 0.02, jitter.width = 0.02, errorbar.draw = TRUE,
+                 position = position_dodge(0.8)) +
+  scale_fill_manual(values=c("blue3", "darkorange")) +
+  labs(title="Purple:
+66 genes",x="Group", y = "Module Eigengene") +
+  theme_classic() +
+  theme(axis.line = element_line(colour = 'black', size = 1),
+        axis.ticks = element_line(colour = "black", size = 1),
+        legend.position="none",
+        axis.text=element_text(size=16),
+        axis.title=element_text(size=18,face="bold"),
+        plot.title = element_text(size=24, hjust = 0.4)) 
+
+
+
+
+
+# Blue 325 x 500
+MEdf2 %>%
+  ggplot(aes(group,MEblue, fill = group))+
+  geom_boxjitter(outlier.color = NA, jitter.shape = 21, 
+                 alpha = 1,
+                 width = 0.5,
+                 jitter.height = 0.02, jitter.width = 0.02, errorbar.draw = TRUE,
+                 position = position_dodge(0.8)) +
+  scale_fill_manual(values=c("blue3", "darkorange")) +
+  labs(title="Blue:
+1528 genes",x="Group", y = "Module Eigengene") +
+  theme_classic() +
+  theme(axis.line = element_line(colour = 'black', size = 1),
+        axis.ticks = element_line(colour = "black", size = 1),
+        legend.position="none",
+        axis.text=element_text(size=16),
+        axis.title=element_text(size=18,face="bold"),
+        plot.title = element_text(size=24, hjust = 0.4)) 
+
+
+
+
+
+
+
