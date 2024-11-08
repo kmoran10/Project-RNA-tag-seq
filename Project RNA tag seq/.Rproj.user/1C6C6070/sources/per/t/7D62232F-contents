@@ -316,7 +316,11 @@ CorLevelPlot(heatmap.data2,
              x = names(heatmap.data2)[12:12], #trait data
              y = names(heatmap.data2)[1:11], #ME data
              col = c("blue3", "skyblue", "white", "#f7ab5e", "orange2"),
-             main = "A. ARC - WGCNA Module Eigengenes") 
+             main = "E. ARC -
+WGCNA Module Eigengenes",
+             fontCorval = 1,
+             cexCorval = 1.6,
+             cexLabY = 1.5) 
 
 ## so for ARC, modules yellow, purple, and blue are significantly altered by stress
 

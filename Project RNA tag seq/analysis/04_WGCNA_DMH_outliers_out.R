@@ -304,12 +304,16 @@ names(heatmap.data2)
 ### NEED TO adjust this step depending on dimensions of heatmap.data
 
 ## IN THE FOLLOWING: POSITIVE VALUES MEAN ME EXPRESSION IS HIGHER IN TRAIT CODED WITH 1 COMPARED TO TRAIT CODED WITH 0 - specifically positive = higher in stressed
-### SAVE 550x800
+### SAVE 550x1000
 CorLevelPlot(heatmap.data2,
              x = names(heatmap.data2)[32:32], #trait data
              y = names(heatmap.data2)[1:31], #ME data
              col = c("blue3", "skyblue", "white", "#f7ab5e", "orange2"),
-             main = "A. DMH - WGCNA Module Eigengenes") 
+             main = "C. DMH -
+WGCNA Module Eigengenes",
+             fontCorval = 1,
+             cexCorval = 1.6,
+             cexLabY = 1.5) 
 
 ## so for DMH, 3 modules, darkred, skyblue and darkgrey are significantly altered by stress
 
