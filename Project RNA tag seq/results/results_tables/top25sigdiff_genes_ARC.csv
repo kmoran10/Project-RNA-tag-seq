@@ -1,14 +1,14 @@
-"symbol","logFC","P.Value","chr","description"
-"Irx2",1.97842637595126,0.0024,"13","Iroquois homeobox 2"
-"Myo3a",-1.54983270327422,0.0046,"2","myosin IIIA"
-"Trim10",-1.65320534103053,0.0056,"17","tripartite motif-containing 10"
-"Micall1",1.66079344816848,0.0142,"15","microtubule associated monooxygenase, calponin and LIM domain containing -like 1"
-"Fbxo43",1.53378014921656,0.0164,"15","F-box protein 43"
-"Il18r1",1.62648614984589,0.0172,"1","interleukin 18 receptor 1"
-"Aqp1",-1.65694032215492,0.024,"6","aquaporin 1"
-"Steap1",1.62790730372094,0.0266,"5","six transmembrane epithelial antigen of the prostate 1"
-"Edn3",-1.52287000552502,0.0268,"2","endothelin 3"
-"Vgll3",-1.63037111435625,0.0506,"16","vestigial like family member 3"
-"Anln",1.50333826613051,0.0508,"9","anillin, actin binding protein"
-"Prdm12",-1.53923264582182,0.06,"2","PR domain containing 12"
-"C6",1.50397172322404,0.0604,"15","complement component 6"
+symbol,logFC,P.Value,description
+Irx2,1.978426376,0.0024,Iroquois homeobox 2
+Myo3a,-1.549832703,0.0046,myosin IIIA
+Trim10,-1.653205341,0.0056,tripartite motif-containing 10
+Micall1,1.660793448,0.0142,"microtubule associated monooxygenase, calponin and LIM domain containing -like 1"
+Fbxo43,1.533780149,0.0164,F-box protein 43
+Il18r1,1.62648615,0.0172,interleukin 18 receptor 1
+Aqp1,-1.656940322,0.024,aquaporin 1
+Steap1,1.627907304,0.0266,six transmembrane epithelial antigen of the prostate 1
+Edn3,-1.522870006,0.0268,endothelin 3
+Vgll3,-1.630371114,0.0506,vestigial like family member 3
+Anln,1.503338266,0.0508,"anillin, actin binding protein"
+Prdm12,-1.539232646,0.06,PR domain containing 12
+C6,1.503971723,0.0604,complement component 6

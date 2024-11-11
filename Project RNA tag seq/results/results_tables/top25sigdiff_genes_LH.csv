@@ -1,19 +1,19 @@
-"symbol","logFC","P.Value","chr","description"
-"Mc3r",-1.93780888637403,2e-04,"2","melanocortin 3 receptor"
-"Ecm1",-1.75845802714971,8e-04,"3","extracellular matrix protein 1"
-"Ghdc",1.67959192486733,0.0012,"11","GH3 domain containing"
-"Bmp3",1.58572481882246,0.0018,"5","bone morphogenetic protein 3"
-"Nmb",-1.86514890206037,0.0026,"7","neuromedin B"
-"Alkbh8",-1.73714317726339,0.0028,"9","alkB homolog 8, tRNA methyltransferase"
-"Zic4",-1.75188047441288,0.0046,"9","zinc finger protein of the cerebellum 4"
-"Nmu",1.57595703376704,0.0072,"5","neuromedin U"
-"Ghrh",-1.93194733175301,0.0074,"2","growth hormone releasing hormone"
-"Smim32",1.86458588831664,0.0096,"13","small integral membrane protein 32"
-"Hmx2",-1.93923602456162,0.013,"7","H6 homeobox 2"
-"Diaph3",-1.62275129560015,0.0168,"14","diaphanous related formin 3"
-"Clrn1",-1.5171609658272,0.0364,"3","clarin 1"
-"Gpr50",-1.51998310071804,0.0384,"X","G-protein-coupled receptor 50"
-"Npvf",-2.13038297699673,0.0438,"6","neuropeptide VF precursor"
-"Acta1",-1.53146389501764,0.044,"8","actin alpha 1, skeletal muscle"
-"Hcrt",-1.88589606247697,0.0732,"11","hypocretin"
-"Lhx9",-1.54023241385206,0.13,"1","LIM homeobox protein 9"
+symbol,logFC,P.Value,description
+Mc3r,-1.937808886,2.00E-04,melanocortin 3 receptor
+Ecm1,-1.758458027,8.00E-04,extracellular matrix protein 1
+Ghdc,1.679591925,0.0012,GH3 domain containing
+Bmp3,1.585724819,0.0018,bone morphogenetic protein 3
+Nmb,-1.865148902,0.0026,neuromedin B
+Alkbh8,-1.737143177,0.0028,"alkB homolog 8, tRNA methyltransferase"
+Zic4,-1.751880474,0.0046,zinc finger protein of the cerebellum 4
+Nmu,1.575957034,0.0072,neuromedin U
+Ghrh,-1.931947332,0.0074,growth hormone releasing hormone
+Smim32,1.864585888,0.0096,small integral membrane protein 32
+Hmx2,-1.939236025,0.013,H6 homeobox 2
+Diaph3,-1.622751296,0.0168,diaphanous related formin 3
+Clrn1,-1.517160966,0.0364,clarin 1
+Gpr50,-1.519983101,0.0384,G-protein-coupled receptor 50
+Npvf,-2.130382977,0.0438,neuropeptide VF precursor
+Acta1,-1.531463895,0.044,"actin alpha 1, skeletal muscle"
+Hcrt,-1.885896062,0.0732,hypocretin
+Lhx9,-1.540232414,0.13,LIM homeobox protein 9

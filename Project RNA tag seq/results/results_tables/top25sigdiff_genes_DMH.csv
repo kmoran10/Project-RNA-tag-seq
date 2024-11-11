@@ -1,11 +1,11 @@
-"symbol","logFC","P.Value","chr","description"
-"Cd68",-1.76591565157257,4e-04,"11","CD68 antigen"
-"Gabpb2",-2.14411620475917,0.0014,"3","GA repeat binding protein, beta 2"
-"Tagln",-1.64990537892741,0.0026,"9","transgelin"
-"Izumo1",-1.78528374896879,0.0114,"7","izumo sperm-egg fusion 1"
-"Lrp2",1.66874854679901,0.0118,"2","low density lipoprotein receptor-related protein 2"
-"Cbl",-1.51526361185988,0.0186,"9","Casitas B-lineage lymphoma"
-"Arhgap28",-1.50623572315878,0.0246,"17","Rho GTPase activating protein 28"
-"Lrrc9",1.52979143673648,0.034,"12","leucine rich repeat containing 9"
-"Npw",1.75846456017161,0.037,"17","neuropeptide W"
-"Shox2",-1.57402899587874,0.2382,"3","short stature homeobox 2"
+symbol,logFC,P.Value,description
+Cd68,-1.765915652,4.00E-04,CD68 antigen
+Gabpb2,-2.144116205,0.0014,"GA repeat binding protein, beta 2"
+Tagln,-1.649905379,0.0026,transgelin
+Izumo1,-1.785283749,0.0114,izumo sperm-egg fusion 1
+Lrp2,1.668748547,0.0118,low density lipoprotein receptor-related protein 2
+Cbl,-1.515263612,0.0186,Casitas B-lineage lymphoma
+Arhgap28,-1.506235723,0.0246,Rho GTPase activating protein 28
+Lrrc9,1.529791437,0.034,leucine rich repeat containing 9
+Npw,1.75846456,0.037,neuropeptide W
+Shox2,-1.574028996,0.2382,short stature homeobox 2
