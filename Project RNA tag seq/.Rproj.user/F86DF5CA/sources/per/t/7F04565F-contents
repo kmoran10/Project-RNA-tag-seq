@@ -150,10 +150,10 @@ ggplot(data = dc,
 
 
 
-
+LH <- readRDS("results/LH_limma_results.RDS")
 
 top25sigdiff_genes_LH <- LH %>% 
-  filter(logFC >= 0.2 | logFC <= -0.2) %>%
+  filter(logFC >= 1.5 | logFC <= -1.5) %>%
   arrange(P.Value) %>% 
   select(symbol, logFC, P.Value, chr, description) %>% 
   head(25)

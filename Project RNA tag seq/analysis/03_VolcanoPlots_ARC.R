@@ -149,10 +149,10 @@ ggplot(data = dc,
 
 
 
-
+ARC <- readRDS("results/ARC_limma_results.RDS")
 
 top25sigdiff_genes_ARC <- ARC %>% 
-  filter(logFC >= 0.2 | logFC <= -0.2) %>%
+  filter(logFC >= 1.5 | logFC <= -1.5) %>%
   arrange(P.Value) %>% 
   select(symbol, logFC, P.Value, chr, description) %>% 
   head(25)
