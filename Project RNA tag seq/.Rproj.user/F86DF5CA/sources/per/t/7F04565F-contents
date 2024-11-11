@@ -143,3 +143,20 @@ ggplot(data = dc,
          strip.text.x = element_text(size = 20),
          text = element_text(size = 20))
 
+
+
+
+
+
+
+
+
+
+top25sigdiff_genes_LH <- LH %>% 
+  filter(logFC >= 0.2 | logFC <= -0.2) %>%
+  arrange(P.Value) %>% 
+  select(symbol, logFC, P.Value, chr, description) %>% 
+  head(25)
+
+write.csv(top25sigdiff_genes_LH,"results/results_tables/top25sigdiff_genes_LH.csv", row.names = F)
+

@@ -146,3 +146,15 @@ ggplot(data = dc,
         text = element_text(size = 20))
 
 
+
+
+
+
+
+top25sigdiff_genes_ARC <- ARC %>% 
+  filter(logFC >= 0.2 | logFC <= -0.2) %>%
+  arrange(P.Value) %>% 
+  select(symbol, logFC, P.Value, chr, description) %>% 
+  head(25)
+
+write.csv(top25sigdiff_genes_ARC,"results/results_tables/top25sigdiff_genes_ARC.csv", row.names = F)
