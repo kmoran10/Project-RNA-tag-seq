@@ -1,19 +1,26 @@
-symbol,logFC,P.Value,description
-Mc3r,-1.937808886,2.00E-04,melanocortin 3 receptor
-Ecm1,-1.758458027,8.00E-04,extracellular matrix protein 1
-Ghdc,1.679591925,0.0012,GH3 domain containing
-Bmp3,1.585724819,0.0018,bone morphogenetic protein 3
-Nmb,-1.865148902,0.0026,neuromedin B
-Alkbh8,-1.737143177,0.0028,"alkB homolog 8, tRNA methyltransferase"
-Zic4,-1.751880474,0.0046,zinc finger protein of the cerebellum 4
-Nmu,1.575957034,0.0072,neuromedin U
-Ghrh,-1.931947332,0.0074,growth hormone releasing hormone
-Smim32,1.864585888,0.0096,small integral membrane protein 32
-Hmx2,-1.939236025,0.013,H6 homeobox 2
-Diaph3,-1.622751296,0.0168,diaphanous related formin 3
-Clrn1,-1.517160966,0.0364,clarin 1
-Gpr50,-1.519983101,0.0384,G-protein-coupled receptor 50
-Npvf,-2.130382977,0.0438,neuropeptide VF precursor
-Acta1,-1.531463895,0.044,"actin alpha 1, skeletal muscle"
-Hcrt,-1.885896062,0.0732,hypocretin
-Lhx9,-1.540232414,0.13,LIM homeobox protein 9
+"symbol","logFC","P.Value","chr","description"
+"Npvf",-2.13038297699673,0.0438,"6","neuropeptide VF precursor"
+"Hmx2",-1.93923602456162,0.013,"7","H6 homeobox 2"
+"Mc3r",-1.93780888637403,2e-04,"2","melanocortin 3 receptor"
+"Ghrh",-1.93194733175301,0.0074,"2","growth hormone releasing hormone"
+"Nmb",-1.86514890206037,0.0026,"7","neuromedin B"
+"Smim32",1.86458588831664,0.0096,"13","small integral membrane protein 32"
+"Ecm1",-1.75845802714971,8e-04,"3","extracellular matrix protein 1"
+"Zic4",-1.75188047441288,0.0046,"9","zinc finger protein of the cerebellum 4"
+"Alkbh8",-1.73714317726339,0.0028,"9","alkB homolog 8, tRNA methyltransferase"
+"Ghdc",1.67959192486733,0.0012,"11","GH3 domain containing"
+"Diaph3",-1.62275129560015,0.0168,"14","diaphanous related formin 3"
+"Bmp3",1.58572481882246,0.0018,"5","bone morphogenetic protein 3"
+"Nmu",1.57595703376704,0.0072,"5","neuromedin U"
+"Acta1",-1.53146389501764,0.044,"8","actin alpha 1, skeletal muscle"
+"Gpr50",-1.51998310071804,0.0384,"X","G-protein-coupled receptor 50"
+"Clrn1",-1.5171609658272,0.0364,"3","clarin 1"
+"Krt77",-1.46919084213658,0.0246,"15","keratin 77"
+"Irs4",-1.45883039883842,0.0054,"X","insulin receptor substrate 4"
+"Isl1",-1.43803694421746,0.0234,"13","ISL1 transcription factor, LIM/homeodomain"
+"Slc7a14",-1.43257156354562,0.0136,"3","solute carrier family 7 (cationic amino acid transporter, y+ system), member 14"
+"Sim1",1.42483670423936,0.0284,"10","single-minded family bHLH transcription factor 1"
+"Asb2",-1.41396675230618,0.0208,"12","ankyrin repeat and SOCS box-containing 2"
+"Cpt1b",1.39318028806504,0.0238,"15","carnitine palmitoyltransferase 1b, muscle"
+"Foxl2",-1.37022833778682,0.0026,"9","forkhead box L2"
+"Cckar",-1.36778041596264,0.0184,"5","cholecystokinin A receptor"

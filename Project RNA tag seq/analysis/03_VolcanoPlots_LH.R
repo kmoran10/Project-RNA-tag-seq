@@ -35,8 +35,8 @@ dc$diffexpressed[dc$logFC > 0.2 & dc$P.Value < 0.05] <- "UP"
 dc$diffexpressed[dc$logFC < -0.2 & dc$P.Value < 0.05] <- "DOWN"
 
 
-dcx <- dc %>% filter(.,logFC >= 1.75)%>% filter(P.Value < 0.05)
-dcxx <- dc %>% filter(.,logFC <= -1.6) %>% filter(P.Value < 0.05)
+dcx <- dc %>% filter(.,logFC >= 1.5)%>% filter(P.Value < 0.05)
+dcxx <- dc %>% filter(.,logFC <= -1.5) %>% filter(P.Value < 0.05)
 dc$log10 <- ifelse(dc$log10 == Inf, 4,dc$log10)
 # dcx <- dc %>% filter(.,abs(logFC) >= 1.5) %>% filter(P.Value < 0.05) 
 
@@ -120,8 +120,8 @@ ggplot(data = dc,
    geom_vline(xintercept=c(-.75,.75),lty=4,col="black",lwd=0.8) +
    geom_vline(xintercept=c(-1.5,1.5),lty=4,col="black",lwd=0.8) +
    geom_hline(yintercept = 1.301,lty=4,col="black",lwd=0.8) +
-   geom_text_repel(data = dcx, aes(x = logFC, y = -log10(P.Value),label = symbol), color = "black",vjust =1, hjust =.45)+
-   geom_text_repel(data = dcxx, aes(x = logFC, y = -log10(P.Value),label = symbol), color = "black", hjust = 1, vjust = -.55)+
+   geom_text_repel(data = dcx, aes(x = logFC, y = -log10(P.Value),label = symbol), color = "black",vjust =1, hjust =.8)+
+   geom_text_repel(data = dcxx, aes(x = logFC, y = -log10(P.Value),label = symbol), color = "black", hjust = 1, vjust = -.8)+
    labs(title = "A. Differential Gene Expression in LH",
         x="log2 Fold Change",
         y=bquote(~-Log[10]~italic(eFDR)))+
@@ -153,8 +153,9 @@ ggplot(data = dc,
 LH <- readRDS("results/LH_limma_results.RDS")
 
 top25sigdiff_genes_LH <- LH %>% 
-  filter(logFC >= 1.5 | logFC <= -1.5) %>%
-  arrange(P.Value) %>% 
+  filter(logFC >= 1.25 | logFC <= -1.25) %>%
+  filter(P.Value < 0.05) %>% 
+  arrange(desc(abs(logFC))) %>% 
   select(symbol, logFC, P.Value, chr, description) %>% 
   head(25)
 

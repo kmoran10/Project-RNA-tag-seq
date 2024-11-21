@@ -1,14 +1,25 @@
-symbol,logFC,P.Value,description
-Irx2,1.978426376,0.0024,Iroquois homeobox 2
-Myo3a,-1.549832703,0.0046,myosin IIIA
-Trim10,-1.653205341,0.0056,tripartite motif-containing 10
-Micall1,1.660793448,0.0142,"microtubule associated monooxygenase, calponin and LIM domain containing -like 1"
-Fbxo43,1.533780149,0.0164,F-box protein 43
-Il18r1,1.62648615,0.0172,interleukin 18 receptor 1
-Aqp1,-1.656940322,0.024,aquaporin 1
-Steap1,1.627907304,0.0266,six transmembrane epithelial antigen of the prostate 1
-Edn3,-1.522870006,0.0268,endothelin 3
-Vgll3,-1.630371114,0.0506,vestigial like family member 3
-Anln,1.503338266,0.0508,"anillin, actin binding protein"
-Prdm12,-1.539232646,0.06,PR domain containing 12
-C6,1.503971723,0.0604,complement component 6
+"symbol","logFC","P.Value","chr","description"
+"Irx2",1.97842637595126,0.0024,"13","Iroquois homeobox 2"
+"Micall1",1.66079344816848,0.0142,"15","microtubule associated monooxygenase, calponin and LIM domain containing -like 1"
+"Aqp1",-1.65694032215492,0.024,"6","aquaporin 1"
+"Trim10",-1.65320534103053,0.0056,"17","tripartite motif-containing 10"
+"Steap1",1.62790730372094,0.0266,"5","six transmembrane epithelial antigen of the prostate 1"
+"Il18r1",1.62648614984589,0.0172,"1","interleukin 18 receptor 1"
+"Myo3a",-1.54983270327422,0.0046,"2","myosin IIIA"
+"Fbxo43",1.53378014921656,0.0164,"15","F-box protein 43"
+"Edn3",-1.52287000552502,0.0268,"2","endothelin 3"
+"Rgs22",1.48786456354437,0.0272,"15","regulator of G-protein signalling 22"
+"Ncf2",-1.45757027829758,0.0096,"1","neutrophil cytosolic factor 2"
+"Etfbkmt",-1.44306355037316,0.0066,"6","electron transfer flavoprotein beta subunit lysine methyltransferase"
+"Trmt2b",-1.439911740241,0.0272,"X","TRM2 tRNA methyltransferase 2B"
+"Morn5",1.42770624854935,0.027,"2","MORN repeat containing 5"
+"Siglec1",-1.42271869656631,0.017,"2","sialic acid binding Ig-like lectin 1, sialoadhesin"
+"Rac2",-1.40840367201165,0.0288,"15","Rac family small GTPase 2"
+"Eln",1.39125870657857,0.005,"5","elastin"
+"Jmjd4",1.38723228778726,0.017,"11","jumonji domain containing 4"
+"Ptgis",-1.34654826046014,0.0048,"2","prostaglandin I2 (prostacyclin) synthase"
+"Atp8b1",-1.31780170571979,0.0154,"18","ATPase, class I, type 8B, member 1"
+"Dnah2",1.31403344404515,0.0076,"11","dynein, axonemal, heavy chain 2"
+"E2f2",-1.26862537140051,0.0198,"4","E2F transcription factor 2"
+"Dynlrb2",1.26442669131987,0.046,"8","dynein light chain roadblock-type 2"
+"Tgfbi",-1.25336374709893,0.0442,"13","transforming growth factor, beta induced"

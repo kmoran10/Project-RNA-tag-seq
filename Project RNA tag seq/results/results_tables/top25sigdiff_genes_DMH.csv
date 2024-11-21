@@ -1,11 +1,26 @@
-symbol,logFC,P.Value,description
-Cd68,-1.765915652,4.00E-04,CD68 antigen
-Gabpb2,-2.144116205,0.0014,"GA repeat binding protein, beta 2"
-Tagln,-1.649905379,0.0026,transgelin
-Izumo1,-1.785283749,0.0114,izumo sperm-egg fusion 1
-Lrp2,1.668748547,0.0118,low density lipoprotein receptor-related protein 2
-Cbl,-1.515263612,0.0186,Casitas B-lineage lymphoma
-Arhgap28,-1.506235723,0.0246,Rho GTPase activating protein 28
-Lrrc9,1.529791437,0.034,leucine rich repeat containing 9
-Npw,1.75846456,0.037,neuropeptide W
-Shox2,-1.574028996,0.2382,short stature homeobox 2
+"symbol","logFC","P.Value","chr","description"
+"Gabpb2",-2.14411620475917,0.0014,"3","GA repeat binding protein, beta 2"
+"Izumo1",-1.78528374896879,0.0114,"7","izumo sperm-egg fusion 1"
+"Cd68",-1.76591565157257,4e-04,"11","CD68 antigen"
+"Npw",1.75846456017161,0.037,"17","neuropeptide W"
+"Lrp2",1.66874854679901,0.0118,"2","low density lipoprotein receptor-related protein 2"
+"Tagln",-1.64990537892741,0.0026,"9","transgelin"
+"Lrrc9",1.52979143673648,0.034,"12","leucine rich repeat containing 9"
+"Cbl",-1.51526361185988,0.0186,"9","Casitas B-lineage lymphoma"
+"Arhgap28",-1.50623572315878,0.0246,"17","Rho GTPase activating protein 28"
+"Smad6",-1.48152433835586,0.0044,"9","SMAD family member 6"
+"Exoc3l2",-1.47294868477058,0.0204,"7","exocyst complex component 3-like 2"
+"Ctxnd1",-1.45042708518866,0.0164,"7","cortexin domain containing 1"
+"Gpr50",1.42915557861645,0.0176,"X","G-protein-coupled receptor 50"
+"Col1a1",-1.42618086302173,0.0312,"11","collagen, type I, alpha 1"
+"Evpl",-1.40365812111417,0.0408,"11","envoplakin"
+"Gas2l2",1.40322704718791,0.045,"11","growth arrest-specific 2 like 2"
+"Atp7b",1.36732911607612,6e-04,"8","ATPase, Cu++ transporting, beta polypeptide"
+"Crtam",1.35756876088668,0.0202,"9","cytotoxic and regulatory T cell molecule"
+"Krtcap3",1.35683137745659,0.0018,"5","keratinocyte associated protein 3"
+"Dock6",-1.3537224842936,0.0148,"9","dedicator of cytokinesis 6"
+"Rspo3",-1.35248573008764,0.005,"10","R-spondin 3"
+"Lvrn",-1.34814418259599,0.0242,"18","laeverin"
+"Sp5",1.33585384960349,0.0124,"2","trans-acting transcription factor 5"
+"Ninj2",-1.3333279315536,0.026,"6","ninjurin 2"
+"Pdlim7",-1.33013220871089,0.0236,"13","PDZ and LIM domain 7"
