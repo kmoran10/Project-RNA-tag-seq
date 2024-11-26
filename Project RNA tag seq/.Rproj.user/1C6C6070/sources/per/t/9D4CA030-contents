@@ -309,7 +309,7 @@ CorLevelPlot(heatmap.data2,
              x = names(heatmap.data2)[32:32], #trait data
              y = names(heatmap.data2)[1:31], #ME data
              col = c("blue3", "skyblue", "white", "#f7ab5e", "orange2"),
-             main = "C. DMH -
+             main = "B. DMH -
 WGCNA Module Eigengenes",
              fontCorval = 1,
              cexCorval = 1.6,
@@ -330,14 +330,24 @@ module.gene.mapping %>%
   filter(`bwnet$colors` == 'darkred') %>%
   rownames()
 
+lmdr <- lm(MEdarkred ~ stress_bin, heatmap.data)
+summary(lmdr)
+
 ## THIS ME has HIGHER expression in Stress
 module.gene.mapping %>%
   filter(`bwnet$colors` == 'skyblue') %>%
   rownames
 
+lmsb <- lm(MEskyblue ~ stress_bin, heatmap.data)
+summary(lmsb)
+
+
 module.gene.mapping %>%
   filter(`bwnet$colors` == 'darkgrey') %>%
   rownames()
+
+lmdg <- lm(MEdarkgrey ~ stress_bin, heatmap.data)
+summary(lmdg)
 
 
 # 6B. Intramodular analysis: Identifying driver genes ---------------
@@ -516,6 +526,144 @@ MMdarkgrey %>%
   head(10)
 
 
+
+
+
+
+#### Module boxplots 
+source("functions/geom_boxjitter.R")
+
+
+
+MEdf <- as.data.frame(module_eigengenes) %>% 
+  tibble::rownames_to_column(., "subject")
+
+cdgrp <- as.data.frame(colData) %>% 
+  tibble::rownames_to_column(., "subject") %>% 
+  select(subject, group)
+
+MEdf2 <- left_join(MEdf, cdgrp, by="subject")
+
+# yellow  - save 325x500
+MEdf2 %>%
+  ggplot(aes(group,MEyellow, fill = group))+
+  geom_boxjitter(outlier.color = NA, jitter.shape = 21, 
+                 alpha = 1,
+                 width = 0.5,
+                 jitter.height = 0.02, jitter.width = 0.02, errorbar.draw = TRUE,
+                 position = position_dodge(0.8)) +
+  scale_fill_manual(values=c("blue3", "darkorange")) +
+  labs(title="Yellow Module:
+146 genes",x="Group", y = "Module Eigengene") +
+  theme_classic() +
+  theme(axis.line = element_line(colour = 'black', size = 1),
+        axis.ticks = element_line(colour = "black", size = 1),
+        legend.position="none",
+        axis.text=element_text(size=16),
+        axis.title=element_text(size=18,face="bold"),
+        plot.title = element_text(size=24, hjust = 0.4)) 
+
+
+
+# magenta 325 x 500
+MEdf2 %>%
+  ggplot(aes(group,MEmagenta, fill = group))+
+  geom_boxjitter(outlier.color = NA, jitter.shape = 21, 
+                 alpha = 1,
+                 width = 0.5,
+                 jitter.height = 0.02, jitter.width = 0.02, errorbar.draw = TRUE,
+                 position = position_dodge(0.8)) +
+  scale_fill_manual(values=c("blue3", "darkorange")) +
+  labs(title="Magenta Module:
+37 genes",x="Group", y = "Module Eigengene") +
+  theme_classic() +
+  theme(axis.line = element_line(colour = 'black', size = 1),
+        axis.ticks = element_line(colour = "black", size = 1),
+        legend.position="none",
+        axis.text=element_text(size=16),
+        axis.title=element_text(size=18,face="bold"),
+        plot.title = element_text(size=24, hjust = 0.4)) 
+
+
+
+
+
+#### Module boxplots 
+source("functions/geom_boxjitter.R")
+
+
+
+MEdf <- as.data.frame(module_eigengenes) %>% 
+  tibble::rownames_to_column(., "subject")
+
+cdgrp <- as.data.frame(colData) %>% 
+  tibble::rownames_to_column(., "subject") %>% 
+  select(subject, group)
+
+MEdf2 <- left_join(MEdf, cdgrp, by="subject")
+
+# darkred  - save 325x500
+MEdf2 %>%
+  ggplot(aes(group,MEdarkred, fill = group))+
+  geom_boxjitter(outlier.color = NA, jitter.shape = 21, 
+                 alpha = 1,
+                 width = 0.5,
+                 jitter.height = 0.02, jitter.width = 0.02, errorbar.draw = TRUE,
+                 position = position_dodge(0.8)) +
+  scale_fill_manual(values=c("blue3", "darkorange")) +
+  labs(title="Darkred:
+29 genes",x="Group", y = "Module Eigengene") +
+  theme_classic() +
+  theme(axis.line = element_line(colour = 'black', size = 1),
+        axis.ticks = element_line(colour = "black", size = 1),
+        legend.position="none",
+        axis.text=element_text(size=16),
+        axis.title=element_text(size=18,face="bold"),
+        plot.title = element_text(size=24, hjust = 0.4)) 
+
+
+
+# skyblue 325 x 500
+MEdf2 %>%
+  ggplot(aes(group,MEskyblue, fill = group))+
+  geom_boxjitter(outlier.color = NA, jitter.shape = 21, 
+                 alpha = 1,
+                 width = 0.5,
+                 jitter.height = 0.02, jitter.width = 0.02, errorbar.draw = TRUE,
+                 position = position_dodge(0.8)) +
+  scale_fill_manual(values=c("blue3", "darkorange")) +
+  labs(title="Skyblue:
+21 genes",x="Group", y = "Module Eigengene") +
+  theme_classic() +
+  theme(axis.line = element_line(colour = 'black', size = 1),
+        axis.ticks = element_line(colour = "black", size = 1),
+        legend.position="none",
+        axis.text=element_text(size=16),
+        axis.title=element_text(size=18,face="bold"),
+        plot.title = element_text(size=24, hjust = 0.4)) 
+
+
+
+
+
+# darkgrey 325 x 500
+MEdf2 %>%
+  ggplot(aes(group,MEdarkgrey, fill = group))+
+  geom_boxjitter(outlier.color = NA, jitter.shape = 21, 
+                 alpha = 1,
+                 width = 0.5,
+                 jitter.height = 0.02, jitter.width = 0.02, errorbar.draw = TRUE,
+                 position = position_dodge(0.8)) +
+  scale_fill_manual(values=c("blue3", "darkorange")) +
+  labs(title="Darkgrey:
+26 genes",x="Group", y = "Module Eigengene") +
+  theme_classic() +
+  theme(axis.line = element_line(colour = 'black', size = 1),
+        axis.ticks = element_line(colour = "black", size = 1),
+        legend.position="none",
+        axis.text=element_text(size=16),
+        axis.title=element_text(size=18,face="bold"),
+        plot.title = element_text(size=24, hjust = 0.4)) 
 
 
 

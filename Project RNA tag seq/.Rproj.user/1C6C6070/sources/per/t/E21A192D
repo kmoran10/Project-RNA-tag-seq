@@ -1,0 +1,27 @@
+{
+    "id": "E21A192D",
+    "path": "C:/R_Projects/Project-RNA-tag-seq/Project RNA tag seq/analysis/06_DEG_overlap_analysis.R",
+    "project_path": "analysis/06_DEG_overlap_analysis.R",
+    "type": "r_source",
+    "hash": "358146181",
+    "contents": "",
+    "dirty": false,
+    "created": 1732638892333.0,
+    "source_on_save": false,
+    "relative_order": 6,
+    "properties": {
+        "tempName": "Untitled1",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "40,0",
+        "scrollLine": "24"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1732651369,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1732651369693,
+    "read_only": false,
+    "read_only_alternatives": []
+}
