@@ -13,11 +13,11 @@ grcm38 <- grcm38
 library(tidyverse)
 
 
-cts_with_unassigned <- read.csv("ham_brain_data/LH_counts.csv", row.names = "X")
+cts_with_unassigned <- read.csv("ham_brain_data/DMH_counts.csv", row.names = "X")
 dlNorm  <- cts_with_unassigned[-c(32317:32345),]
 dlNorm  <- dlNorm [,-1]
 
-coldata <- read.csv("ham_brain_data/LH_id.csv", row.names = "X")
+coldata <- read.csv("ham_brain_data/DMH_id.csv", row.names = "X")
 coldata <- coldata[-1,]
 
 dlNorm <- dlNorm[apply(dlNorm[], 1, function(x) !all(x==0)),]
@@ -88,11 +88,11 @@ efit.dl2 = eBayes(vfit.dl2)
 p.dl.limma2 = efit.dl2[["p.value"]]
 head(p.dl.limma2)
 
-saveRDS(v.dl, "results/limma_vdl_LH.RDS")
+saveRDS(v.dl, "results/limma_vdl_DMH.RDS")
 
 
 
-### random sampling - don't redo unless needed ####
+### random sampling
 
 R = 5000
 set.seed(312)
@@ -105,26 +105,26 @@ p.dl.rand.t = vector('list',length = R)
 
 for( g in 1 : R){
   print(paste("Starting on Permutation", g))
-
+  
   # Randomize the traits
-
+  
   group.dl.rand = sample(group.dl)
-
+  
   # Model
   design.dl.rand = model.matrix(~0 + group.dl.rand)
   colnames(design.dl.rand) <- mycolnames
-
+  
   # Calculate p-values based on randomized traits
   v.dl.rand = voom(dge.dl, design.dl.rand, plot = F)
   vfit.dl.rand = lmFit(v.dl.rand, design.dl.rand)
-
+  
   vfit.dl.rand2 <- contrasts.fit(vfit.dl.rand, contr.matrix)
-
+  
   efit.dl.rand2 = eBayes(vfit.dl.rand2)
-
+  
   p.dl.rand[[g]] = efit.dl.rand2[["p.value"]]
   p.dl.rand.t[[g]] = efit.dl.rand2[["t"]]
-
+  
 }
 
 
@@ -145,11 +145,11 @@ sum(duplicated(row.names(efit.dl2$coefficients)))
 
 
 
-saveRDS(q.dl,("results/limma_vdl_cutoff5_2000_tworand_LH.RDS"))
+saveRDS(q.dl,("results/limma_vdl_cutoff5_2000_tworand_DMH.RDS"))
 
-#### done random sampling - don't redo unless needed ####
+####
 
-q.dl <- readRDS("results/limma_vdl_cutoff5_2000_tworand_LH.RDS")
+q.dl <- readRDS("results/limma_vdl_cutoff5_2000_tworand_DMH.RDS")
 
 
 ##### Analysis pulling genes out for each contrast 
@@ -159,13 +159,13 @@ tmp1 <- contrasts.fit(efit.dl2, coef = 1) #
 
 
 
-LH_limma_results <- topTable(tmp1, sort.by = "P", n = Inf) %>% 
+DMH_limma_results <- topTable(tmp1, sort.by = "P", n = Inf) %>% 
   rownames_to_column('symbol') %>% 
   dplyr::select(symbol,logFC,P.Value,adj.P.Val)
 
 
 
-LH_limma_results1 <- LH_limma_results %>% 
+DMH_limma_results1 <- DMH_limma_results %>% 
   left_join(grcm38, by = "symbol") %>% 
   filter(!is.na(symbol)) %>% 
   filter(!is.na(entrez)) %>%
@@ -174,19 +174,19 @@ LH_limma_results1 <- LH_limma_results %>%
 
 
 
-saveRDS(LH_limma_results1,"results/LH_limma_results.RDS")
+saveRDS(DMH_limma_results1,"results/DMH_limma_results.RDS")
 
 
-LH_limma_results1 <- readRDS("results/LH_limma_results.RDS")
+DMH_limma_results1 <- readRDS("results/DMH_limma_results.RDS")
 
-LH_limma_results1 %>% 
+DMH_limma_results1 %>% 
   filter(., P.Value<0.05) %>% 
   filter(., P.Value != 0) %>%
   summarise(.,Up = sum(logFC>0.2),
             Down = sum(logFC<0.2)) %>% 
   mutate(.,Total = Up + Down) 
 
-hist(LH_limma_results1$logFC)
+hist(DMH_limma_results1$logFC)
 
 
 

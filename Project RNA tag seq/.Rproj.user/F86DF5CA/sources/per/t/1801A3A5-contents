@@ -63,6 +63,6 @@ LH <- readRDS("results/LH_limma_results.RDS")
 DMH <- readRDS("results/DMH_limma_results.RDS")
 ARC <- readRDS("results/ARC_limma_results.RDS")
 
-LH  %>% filter(symbol == "Npvf")
+LH  %>% filter(symbol == "Hcrt")
 DMH %>% filter(symbol == "Npvf")
-ARC %>% filter(symbol == "Npvf")
+ARC %>% filter(symbol == "Npy")

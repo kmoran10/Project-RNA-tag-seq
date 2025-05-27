@@ -163,3 +163,9 @@ local({
   legend("topright", c("*** q<0.001", "** q<0.01", "* q<0.05"), text.col="black", bty="n", cex=0.8)
   title("C. Top ARC genes and Subjugation Correlations (Holm-corrected)", line=2, cex.main=1.2)
 })
+
+
+library(RcmdrMisc)
+
+rcorr.adjust(as.matrix(arcsubcts[, c(3:5, 6:14)]), type = c("spearman"), 
+             use=c("complete.obs"))
